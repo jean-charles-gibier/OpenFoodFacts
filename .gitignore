@@ -1,0 +1,7 @@
+./pyvenv.cfg
+./lib64/*
+./lib/*
+./include/*
+./share/*
+./bin/*
+./.gitignore
