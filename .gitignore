@@ -5,3 +5,4 @@
 ./share/*
 ./bin/*
 ./.gitignore
+./.idea/*
