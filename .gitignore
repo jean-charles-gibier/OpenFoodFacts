@@ -6,3 +6,6 @@
 ./bin/*
 ./.gitignore
 ./.idea/*
+/bin/
+/lib/
+/share/
