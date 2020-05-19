@@ -1,3 +1,8 @@
+Site tableau kaban :
+https://jcgibierscompany.atlassian.net/jira/software/projects/CO/boards/2
+
+
+
 No authentication is required.
 
 However, you have to add a User-Agent HTTP Header with the name of your app, the version, system and a url (if any), not to be blocked by mistake.
