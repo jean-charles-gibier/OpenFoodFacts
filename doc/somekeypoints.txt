@@ -15,3 +15,6 @@ Example:
 GET https://fr-en.openfoodfacts.org/category/pizzas.json
 
 The language codes supported are based on the ISO Standards 639-1. 
+
+-- récupérer les catégories en français
+curl --location --request GET https://fr-en.openfoodfacts.org/categories.json > categories.json
