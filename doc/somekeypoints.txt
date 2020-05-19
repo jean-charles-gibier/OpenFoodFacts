@@ -3,3 +3,15 @@ No authentication is required.
 However, you have to add a User-Agent HTTP Header with the name of your app, the version, system and a url (if any), not to be blocked by mistake.
 
 For example: User-Agent: NameOfYourApp - Android - Version 1.0 - www.yourappwebsite.com
+
+-- 
+
+To avoid using specific parameters in the local language, you can specify the language in the subdomain:
+
+https://<cc>-<lc>.openfoodfacts.org
+
+Example:
+
+GET https://fr-en.openfoodfacts.org/category/pizzas.json
+
+The language codes supported are based on the ISO Standards 639-1. 
