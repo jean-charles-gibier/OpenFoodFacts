@@ -18,6 +18,8 @@ The language codes supported are based on the ISO Standards 639-1.
 
 -- récupérer les catégories en français
 curl --location --request GET https://fr-en.openfoodfacts.org/categories.json > categories.json
+ou 
+curl --location  --header 'Content-Type: application/json' --header 'User-Agent: HealthyFoodChoices - Android - Version 1.0'  --request GET https://fr.openfoodfacts.org/categories.json  > categories2.json
 
 
 --  Comparison of nutriments
