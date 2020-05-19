@@ -18,3 +18,27 @@ The language codes supported are based on the ISO Standards 639-1.
 
 -- récupérer les catégories en français
 curl --location --request GET https://fr-en.openfoodfacts.org/categories.json > categories.json
+
+
+--  Comparison of nutriments
+
+Nutriment to compare
+
+nutriment_compare_0
+
+Operator
+
+    lt # less than
+    lte # less than or equal
+    gt # greater than
+    gte # greater than or equal
+    eq # equal to
+    nutriment_value_0 - Value to compare the nutrients to
+
+Other search parameters: Output
+
+    sort_by # sort by
+    unique_scans_n # Popularity
+    product_name # Product name
+    created_t # Add date
+    last_modified_t # Edit date
