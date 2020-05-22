@@ -27,4 +27,4 @@ Sur la plan technique / architecture du prg
 - présenter catégorie / produit avec sous classes => une mission par classe : filtrage / nettoyage / enregistrement 
 
 Suivi de l'organisation sur :
-[Jira (https://jcgibierscompany.atlassian.net/jira/software/projects/CO/boards/2)]
+[ Jira ](https://jcgibierscompany.atlassian.net/jira/software/projects/CO/boards/2)
