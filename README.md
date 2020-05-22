@@ -14,10 +14,11 @@ Il doit (sur demande) :
 - instancier des objets avec ces données (Categorie, Produit etc.)
 - enregistrer ces objets dans une Bdd (en mode raw => par paquet de X000)
 - enregistrer les relations entre ce objets
-- restituer ces données en fonction de critères particuliers
-- presenter un interface de requetage & administration de la base 
+- restituer ces données en fonction de critères choisis
+- presenter une interface de requetage & administration de la base (cf user story décrite dans la présentation du prj) 
 
-Sur la plan technique / architecture du prg il doit :
+Sur la plan technique / architecture du prg 
+=> il doit :
 - définir un model clair (produit categorie : many 2 many  => + magasins ?) 
 - respecter la PEP8 /257
 - avoir des packages définis (cf prj 3 / pas de classe fourre tout)
