@@ -7,8 +7,8 @@ status : [![CircleCI](https://circleci.com/gh/jean-charles-gibier/OpenFoodFacts.
 
 (Bonne question).
 
-Il doit (sur demande) :
-- requeter une API REST => faire un POC de quelques lignes capable de ramener une réponse de OFF
+Il doit :
+- requeter (sur demande) une API REST (faire un POC de quelques lignes capable de ramener une réponse de OFF)
 - interperéter la réponse en JSON, déterminer sa nature OK 200 / KO x00
 - naviguer dans la structure pour en extraire les données utiles
 - instancier des objets avec ces données (Categorie, Produit etc.)
