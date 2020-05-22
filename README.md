@@ -10,7 +10,7 @@ status : [![CircleCI](https://circleci.com/gh/jean-charles-gibier/OpenFoodFacts.
 Il doit (sur demande) :
 - requeter une API REST => faire un POC de quelques lignes capable de ramener une réponse de OFF
 - interperéter la réponse en JSON, déterminer sa nature OK 200 / KO x00
-- naviquer dans la structure pour en extraire les données utiles
+- naviguer dans la structure pour en extraire les données utiles
 - instancier des objets avec ces données (Categorie, Produit etc.)
 - enregistrer ces objets dans une Bdd (en mode raw => par paquet de X000)
 - enregistrer les relations entre ce objets
