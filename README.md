@@ -14,7 +14,7 @@ Il doit (sur demande) :
 - instancier des objets avec ces données (Categorie, Produit etc.)
 - enregistrer ces objets dans une Bdd (en mode raw => par paquet de X000)
 - enregistrer les relations entre ce objets
-- restituer ces données en fonction de crotères particuliers
+- restituer ces données en fonction de critères particuliers
 - presenter un interface de requetage & administration de la base 
 
 Sur la plan technique / architecture du prg il doit :
