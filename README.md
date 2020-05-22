@@ -15,7 +15,8 @@ Il doit (sur demande) :
 - enregistrer ces objets dans une Bdd (en mode raw => par paquet de X000)
 - enregistrer les relations entre ce objets
 - restituer ces données en fonction de critères choisis
-- presenter une interface de requetage & administration de la base (cf user story décrite dans la présentation du prj) 
+- presenter une interface de requetage & administration de la base 
+- cf user story décrite dans la [présentation du prj](https://openclassrooms.com/fr/projects/157/assignment) 
 
 Sur la plan technique / architecture du prg 
 => il doit :
