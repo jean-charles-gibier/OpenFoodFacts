@@ -13,7 +13,7 @@ Il doit :
 - naviguer dans la structure pour en extraire les données utiles
 - instancier des objets avec ces données (Categorie, Produit etc.)
 - enregistrer ces objets dans une Bdd (en mode raw => par paquet de X000)
-- enregistrer les relations entre ce objets
+- enregistrer les relations entre ces objets
 - restituer ces données en fonction de critères choisis
 - presenter une interface de requetage & administration de la base 
 - cf user story décrite dans la [présentation du prj](https://openclassrooms.com/fr/projects/157/assignment) 
