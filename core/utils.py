@@ -11,10 +11,10 @@ def parse_arguments():
      parameters :
         --datafile : name of file map without extension """
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--datafile", help="""TXT file containing map of
-        labyrinth""", default="default.txt")
-    parser.add_argument("-i", "--interface", help="""Display interface :
-        'text' or 'graphic'""", default="Graphic", choices=['Graphic', 'Text'])
+    parser.add_argument("-d", "--nbcategory", help=""" maximum coategories number
+        """, default="10")
+    parser.add_argument("-i", "--nbcproducts", help="""maximum products number
+        """, default="100000")
     return parser.parse_args()
 
 
