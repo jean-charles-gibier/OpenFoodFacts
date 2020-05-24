@@ -1,8 +1,28 @@
 # -*- coding: utf-8 -*- #
-from core import constant
-import mysql.connector
+import json
+
+import mysql
+from core.dao.database import Database
 
 
+"""
+
+
+    Immediately before the first statement, determine the highest ROWID in use in the table.
+
+    oldmax ← Execute("SELECT max(ROWID) from nodes").
+
+    Perform the first insert as before.
+
+    Read back the row IDs that were actually assigned with a select statement:
+
+    NewNodes ← Execute("SELECT ROWID FROM nodes WHERE ROWID > ? ORDER BY ROWID ASC", oldmax) .
+
+    Construct the connection_values array by combining the parent ID from new_values and the child ID from NewNodes.
+
+    Perform the second insert as before.
+
+"""
 class Writer:
 
     """ pattern raw insertion """
@@ -32,12 +52,14 @@ class Writer:
         values_list = ', '.join( [ '%(' + col_name + ')s' for col_name in self._columnns_names])
         self._raw_insert_ignore_request = self._raw_insert_ignore_pattern % (self._table_name, columns_names, values_list)
 
+
     def write_rows(self):
         self._build_raw_request()
-        cnx = mysql.connector.connect(user='openfoodfacts', password='openfoodfacts',
-                                     host='127.0.0.1',
-                                     database='openfoodfacts_schema')
+        db = Database()
+        cnx = db.handle
         cursor = cnx.cursor()
+        cursor.execute('LOCK TABLES {} WRITE'.format(self._table_name))
+
         try:
             cursor.executemany(
                 self._raw_insert_ignore_request, self._bulk_list
@@ -47,10 +69,7 @@ class Writer:
 
         # vide la liste qui vient d'être écrite
         self._bulk_list.clear()
+
+        cursor.execute('UNLOCK TABLES')
         cnx.commit()
         cnx.close()
-
-#    @property
-#    def raw_insert_ignore_request(self):
-#        self._build_raw_request()
-#        return self._raw_insert_ignore_request

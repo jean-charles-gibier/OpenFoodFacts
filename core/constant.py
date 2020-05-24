@@ -12,4 +12,5 @@ API_URL_CATEGORIES="https://fr.openfoodfacts.org/products/categories"
 API_URL_PRODUCTS="https://fr.openfoodfacts.org/cgi/search.pl"
 # default nb de produits  max à charger (chunk size)
 LIMIT_NB_PRODUCTS = 1000
-
+#default db config file
+DB_CONFIG_FILE='resources/database.json'

@@ -1,4 +1,5 @@
 ./pyvenv.cfg
+./resources/database.json
 ./lib64/*
 ./lib/*
 ./include/*
