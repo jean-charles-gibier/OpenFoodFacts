@@ -1,12 +1,14 @@
-import requests
-
+import sys
 from core import constant
+import logging as lg
 
+logger = lg.getLogger(__name__)
 
 class ProductDownloader:
 
     """ defines product object"""
-    # collectionof caotegorie
+
+    # collection of caotegorie
     _list_products = []
 
     """ Download products from OFF API """
@@ -28,6 +30,8 @@ class ProductDownloader:
 
     def fetch(self, categorie, number=20):
         """ Fetch products from OFF API """
+        from core.downloader.customrequest import special_get
+
         payload = {
             "action": "process",
             "tagtype_0": "categories",
@@ -39,9 +43,12 @@ class ProductDownloader:
             "json": 1
         }
 
-        response = requests.get(
-            constant.API_URL_PRODUCTS, params=payload)
-        data = response.json()
-        self._page_counter = self._page_counter + 1
-        self._list_products = data['products']
+        try:
+            response = special_get(constant.API_URL_PRODUCTS, payload)
+            data = response.json()
+            self._page_counter = self._page_counter + 1
+            self._list_products = data['products']
+        except:
+            logger.error("Unexpected error:", sys.exc_info()[0])
+
         return len(self._list_products) > 0

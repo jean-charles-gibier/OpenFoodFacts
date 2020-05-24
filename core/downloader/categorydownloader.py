@@ -1,6 +1,8 @@
-import requests
-
+import sys
 from core import constant
+import logging as lg
+
+logger = lg.getLogger(__name__)
 
 
 class CategoryDownloader:
@@ -20,6 +22,8 @@ class CategoryDownloader:
         number : nombre de relevés
         lower_limit : nombre de produits minimum pour selectionner la categorie
         """
+        import core.downloader.customrequest
+
         payload = {
             "origins": origin,
             "page_size": number,
@@ -27,8 +31,13 @@ class CategoryDownloader:
             "json": 1,
         }
 
-        response = requests.get(constant.API_URL_CATEGORIES, params=payload)
-        data = response.json()
-        # on ne selectionne que les catégories avec un nombre "consequent" de produits
-        self._list_categories = [categorie for categorie in data['tags'] if categorie["products"] > lower_limit]
+
+        try:
+            response = core.downloader.customrequest.special_get(constant.API_URL_CATEGORIES, payload)
+            data = response.json()
+            # on ne selectionne que les catégories avec un nombre "consequent" de produits
+            self._list_categories = [categorie for categorie in data['tags'] if categorie["products"] > lower_limit]
+        except:
+            logger.error("Unexpected error:", sys.exc_info()[0])
+
         return len(self._list_categories) > 0
