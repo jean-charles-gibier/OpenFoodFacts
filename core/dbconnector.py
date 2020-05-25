@@ -2,7 +2,7 @@ from core import constant
 import json
 import mysql.connector
 
-class Database:
+class DbConnector:
 
     def __init__(self, pathcfg = constant.DB_CONFIG_FILE):
         with open(pathcfg) as f:
@@ -13,6 +13,7 @@ class Database:
     def __del__(self):
         if hasattr(self, '_handle'):
             self._handle.close()
+            delattr(self, '_handle')
 
     @property
     def handle(self):

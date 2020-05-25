@@ -14,6 +14,7 @@ CREATE TABLE Product (
 	stores VARCHAR(100),
 	url VARCHAR(200),
 	nutrition_grade CHAR(1),
+/*    _category_list VARCHAR(1000), */
 	PRIMARY KEY (id)
 );
 
