@@ -15,6 +15,9 @@ class CategoryDownloader:
     def list_categories(self):
         """ get page counter """
         return self._list_categories
+    @property
+    def nb_categories(self):
+        return len(self._list_categories)
 
     def fetch(self, origin=constant.DEFAULT_COUNTRY_ORIGIN, number=constant.LIMIT_NB_CATEGORIES, lower_limit=constant.LOW_LIMIT_NB_PRODUCTS):
         """fetch  downloads categories from OFF API
@@ -30,7 +33,6 @@ class CategoryDownloader:
             "page": 1,
             "json": 1,
         }
-
 
         try:
             response = core.downloader.customrequest.special_get(constant.API_URL_CATEGORIES, payload)

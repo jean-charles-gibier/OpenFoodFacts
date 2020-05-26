@@ -14,9 +14,14 @@ class ProductDownloader:
     """ Download products from OFF API """
     _page_counter = 1
 
+
     def reset_page_counter(self):
         """ reset page counter """
         self._page_counter = 1
+
+    @property
+    def nb_products(self):
+        return len(self._list_products)
 
     @property
     def list_products(self):

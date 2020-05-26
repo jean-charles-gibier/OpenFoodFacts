@@ -6,7 +6,7 @@ class DaoCategory:
         self.db = DbConnector()
         self.cnx = self.db.handle
 
-    def get_category_id(self, tag):
+    def get_category(self, tag):
         """
         get a category id from his tag
         :param cnx: cnx handle
