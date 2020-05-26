@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*- #
+import sys
 import mysql
 from core.dbconnector import DbConnector
+import logging as lg
+
+logger = lg.getLogger(__name__)
 
 
 class Writer:
@@ -9,10 +13,10 @@ class Writer:
     it is used for raw insertion
     """
     """ cf  build_raw_request for explanations """
-    INLINE_MODE = 0
     PLACEHOLDER_MODE = 1
+    INLINE_MODE = 2
 
-    def __init__(self,  table_name):
+    def __init__(self, table_name):
         """ init element list """
         self._bulk_list = list()
         """ table name """
@@ -38,11 +42,31 @@ class Writer:
             if not self._columns_names:
                 self._columns_names = row_element.columns_names
 
+    def add_rows(self, json_list, zcls):
+        """ add a bunch of rows
+        json_list :
+        zcls : can be a class type or an dict
+        """
+        for idx, some in enumerate(json_list):
+            try:
+                # variable object type : if cls is None => we use dict values
+                if isinstance(zcls, dict):
+                    transf = self.make_writable(some, zcls)
+                    self.add_row(transf)
+                else:
+                    an_instance = zcls(**some)
+                    self.add_row(an_instance)
+            except:
+                json_list.pop(idx)
+                logger.error('[%s] Ne peut enregistrer #%s', sys.exc_info()[0], str(some))
+
+        return json_list
+
     def _build_raw_request(self, mode):
         """ build insert request
         mode :
-        1 : "PLACEHOLDER_MODE => requête 'executemany' avec placeholder "python_connector"
-        2 : "sql natif" => requête 'execute' avec sql standard (requête "in extenso")
+        1 : PLACEHOLDER_MODE => requête 'executemany' avec placeholder "python_connector"
+        2 : INLINE_MODE "sql natif" => requête 'execute' avec sql standard (requête "in extenso")
         """
         columns_names = ', '.join(self._columns_names)
         columns_names = '(' + columns_names + ')'
@@ -53,13 +77,14 @@ class Writer:
             values_list = '(' + values_list + ')'
         else:
             values_list = ', '.join(
-                ["((select id from product where ean_code ='" + values["product_id"] + "'), " + str(values["category_id"] )+ ")" for values in self._bulk_list])
-        self._raw_insert_ignore_request = self._raw_insert_ignore_pattern % (self._table_name, columns_names, values_list, on_duplicate)
-
+                ["((select id from product where ean_code ='" + values["product_id"] + "'), " + str(
+                    values["category_id"]) + ")" for values in self._bulk_list])
+        self._raw_insert_ignore_request = self._raw_insert_ignore_pattern % (
+        self._table_name, columns_names, values_list, on_duplicate)
 
     def write_rows(self):
         """ write specified values in specified table """
-        self._build_raw_request(1)
+        self._build_raw_request(self.PLACEHOLDER_MODE)
         db = DbConnector()
         cnx = db.handle
         cursor = cnx.cursor()
@@ -82,10 +107,9 @@ class Writer:
         cnx.commit()
         cnx.close()
 
-
     def join_rows(self):
         """ write simple jointure many 2 many table """
-        self._build_raw_request(2)
+        self._build_raw_request(self.INLINE_MODE)
         db = DbConnector()
         cnx = db.handle
         cursor = cnx.cursor()
@@ -103,3 +127,15 @@ class Writer:
         cursor.close()
         cnx.commit()
         cnx.close()
+
+    def make_writable(self, infos, zcls):
+        """ prepare un objet insérable pour Writer """
+        ncls = dict(zcls)
+        for k in ncls.keys():
+            if isinstance(ncls[k], str) and ncls[k].startswith('$'):
+                ncls[k] = infos[ncls[k][1:]]
+        return {
+            "columns_values": ncls,
+            "columns_names": ncls.keys()
+        }
+

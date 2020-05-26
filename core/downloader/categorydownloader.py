@@ -15,6 +15,7 @@ class CategoryDownloader:
     def list_categories(self):
         """ get page counter """
         return self._list_categories
+
     @property
     def nb_categories(self):
         return len(self._list_categories)

@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 # coding: utf-8
 
-import sys
 from core import utils
 from core import constant
 from core.dao.daocategory import DaoCategory
@@ -17,43 +16,31 @@ logger = lg.getLogger(__name__)
 
 
 def main():
-    def product_category_writable(pairs_kv):
-        """ prepare un objet insérable pour Writer """
-        return {
-            "columns_values": pairs_kv,
-            "columns_names": pairs_kv.keys()
-        }
-
+    args = utils.parse_arguments()
     # prepare les logs
     utils.set_logger()
     # instance de chargement des catégories
     category_downloader = CategoryDownloader()
+    # instance de chargement des produits
+    product_downloader = ProductDownloader()
 
     if not category_downloader.fetch('France', constant.LIMIT_NB_CATEGORIES):
         raise Exception("No category found : Abort.")
-    # TODO fusionner CategoryDownloader et ProductDownloader
-    # nb_categories = len(category_downloader.list_categories)
+    # TODO fusion de CategoryDownloader et ProductDownloader
     logger.debug('Il y a %d categories à charger.', category_downloader.nb_categories)
     category_writer = Writer("category")
     product_writer = Writer("product")
     product_category_writer = Writer("productcategory")
 
     logger.debug('Start collecting categories')
-    product_downloader = ProductDownloader()
-    for category in category_downloader.list_categories:
-        # TODO => category_writer.add_rows(category_downloader)
-        # record the current category
-        try:
-            a_category = Category(**category)
-            category_writer.add_row(a_category)
-        except:
-            logger.error('[%s] Ne peut enregistrer #%s', sys.exc_info()[0], category)
+    category_writer.add_rows(category_downloader.list_categories, Category)
     logger.debug('End collecting categories')
 
     logger.debug('Start writing categories')
     category_writer.write_rows()
     logger.debug('End writing categories')
 
+    # parcours des categories enregistrées
     logger.debug('Start collecting products')
     for category in category_downloader.list_categories:
         logger.debug('Start collecting category "%s"', category['name'])
@@ -65,31 +52,11 @@ def main():
         while product_downloader.fetch(category['name'], constant.LIMIT_NB_PRODUCTS):
             logger.debug('Start getting page #%d', product_downloader.page_counter - 1)
             # parcours des produits de la page courante
-            # TODO faire une fonction  à a place de la boucle
-            # TODO => product_writer.add_rows(product_downloader)
-            for product in product_downloader.list_products:
-                try:
-                    a_product = Product(**product)
-                    product_writer.add_row(a_product)
-                except:
-                    logger.error('[%s] Ne peut enregistrer #%s', sys.exc_info()[0], product)
-
-                # informations jointure
-                try:
-                    product_category_writer.add_row(
-                        product_category_writable(
-                            {
-                                "product_id": product['code'],
-                                "category_id": id_category
-                            }
-                        )
-                    )
-                except:
-                    logger.error('[%s] Ne peut enregistrer la jointure %s <=> %d', sys.exc_info()[0], product['code'],
-                                 id_category)
-
+            new_list = product_writer.add_rows(product_downloader.list_products, Product)
+            # ajout des index dans la table de jointure
+            product_category_writer.add_rows(new_list, {"product_id": '$code', "category_id": id_category})
             logger.debug('End collecting category "%s"', category['name'])
-
+            # Ecriture en base
             logger.debug('Start writing products')
             product_writer.write_rows()
             logger.debug('End writing products')
@@ -97,8 +64,8 @@ def main():
             product_category_writer.join_rows()
             logger.debug('End writing product_category relations')
 
-        logger.debug('End getting page #%d', product_downloader.page_counter - 1)
-
+            logger.debug('End getting page #%d', product_downloader.page_counter - 1)
+        logger.debug('End collecting category "%s"', category['name'])
     logger.debug('End collecting products')
 
 

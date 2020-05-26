@@ -11,9 +11,11 @@ def parse_arguments():
      parameters :
         --datafile : name of file map without extension """
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--nbcategory", help=""" maximum coategories number
+    parser.add_argument("-d", "--nbcategory", help=""" Maximum categories number
         """, default="10")
-    parser.add_argument("-i", "--nbcproducts", help="""maximum products number
+    parser.add_argument("-c", "--country", help=""" Country where data are selected from 
+        """, default='France')
+    parser.add_argument("-i", "--nbcproducts", help="""  Maximum products number
         """, default="100000")
     return parser.parse_args()
 
