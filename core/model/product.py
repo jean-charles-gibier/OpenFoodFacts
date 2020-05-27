@@ -19,6 +19,8 @@ class Product():
         self._columns_values['nutrition_grade'] = product['nutrition_grade_fr']
         self._columns_names =['ean_code', 'product_name', 'generic_name', 'brands', 'stores', 'url', 'nutrition_grade']
 
+    #TODO faire builder avec @classmethod
+
     @property
     def id(self):
         return self._id

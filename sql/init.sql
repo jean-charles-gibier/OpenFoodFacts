@@ -1,13 +1,14 @@
 SET NAMES utf8;
+set FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `tag` varchar(100) NOT NULL,
+  `id_off` varchar(100) NOT NULL,
   `name` varchar(100) DEFAULT NULL,
   `url` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `tag` (`tag`),
+  UNIQUE KEY `id_off` (`id_off`),
   KEY `idx_name` (`name`(15))
 ) ENGINE=InnoDB;
 
@@ -24,7 +25,8 @@ CREATE TABLE `product` (
   `nutrition_grade` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ean_code_UNIQUE` (`ean_code`),
-  KEY `idx_product_generic_brand` (`product_name`(15),`generic_name`(15),`brands`(15))
+  FULLTEXT (`product_name`,`generic_name`,`brands`)
+--   KEY `idx_product_generic_brand` (`product_name`(15),`generic_name`(15),`brands`(15))
 ) ENGINE=InnoDB;
 
 
@@ -40,11 +42,11 @@ CREATE TABLE `productcategory` (
 ) ENGINE=InnoDB;
 
 
--- Table structure for table `savedsubstitute`
+-- Table structure for table `substitute`
 --
 
-DROP TABLE IF EXISTS `savedsubstitute`;
-CREATE TABLE `savedsubstitute` (
+DROP TABLE IF EXISTS `substitute`;
+CREATE TABLE `substitute` (
   `original_product_id` bigint unsigned NOT NULL,
   `substitute_product_id` bigint unsigned NOT NULL,
   PRIMARY KEY (`original_product_id`,`substitute_product_id`),
@@ -52,3 +54,5 @@ CREATE TABLE `savedsubstitute` (
   CONSTRAINT `fk_original_product_id` FOREIGN KEY (`original_product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `fk_substitute_product_id` FOREIGN KEY (`substitute_product_id`) REFERENCES `product` (`id`)
 ) ENGINE=InnoDB;
+
+set FOREIGN_KEY_CHECKS = 1;

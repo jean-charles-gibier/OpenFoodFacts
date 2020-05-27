@@ -8,7 +8,7 @@ logger = lg.getLogger(__name__)
 class CategoryDownloader:
     """ defines category object"""
 
-    # a list of category tags
+    # a list of category id_off
     _list_categories = []
 
     @property

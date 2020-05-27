@@ -46,7 +46,8 @@ def main():
         logger.debug('Start collecting category "%s"', category['name'])
         product_downloader.reset_page_counter()
         dao_category = DaoCategory()
-        id_category = dao_category.get_category(category['id'])
+        # get "our id" from "off id"
+        id_category = dao_category.get_category_id(category['id'])
 
         # parcours des produits par catégories
         while product_downloader.fetch(category['name'], constant.LIMIT_NB_PRODUCTS):
