@@ -10,9 +10,9 @@ class Category:
     def __init__(self, **category):
         # petite verrue l'attribut id de off est renommé en id_off
         self._columns_values = dict()
-        self._columns_values['id_off'] = category['id']
-        self._columns_values['url'] = category['url']
-        self._columns_values['name'] = category['name']
+        self._columns_values['id_off'] = category['id'] if 'id' in category else None
+        self._columns_values['url'] = category['url'] if 'url' in category else None
+        self._columns_values['name'] = category['name'] if 'name' in category else None
         self._columns_names=['id_off', 'url', 'name']
 
     @property

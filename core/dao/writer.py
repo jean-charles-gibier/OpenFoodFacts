@@ -49,10 +49,11 @@ class Writer:
         """
         for idx, some in enumerate(json_list):
             try:
-                # variable object type : if cls is None => we use dict values
+                # we get dict values
                 if isinstance(zcls, dict):
                     transf = self.make_writable(some, zcls)
                     self.add_row(transf)
+                # we get object (Category, Product)
                 else:
                     an_instance = zcls(**some)
                     self.add_row(an_instance)

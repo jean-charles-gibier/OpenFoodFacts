@@ -1,14 +1,12 @@
 #!/usr/bin/python3
 # coding: utf-8
+import sys
 
 from core import utils
-from core import constant
-from core.dao.daocategory import DaoCategory
-from core.downloader.categorydownloader import CategoryDownloader
-from core.downloader.productdownloader import ProductDownloader
-from core.model.category import Category
-from core.model.product import Product
-from core.dao.writer import Writer
+from core.dao.daoproduct import DaoProduct
+from core.filler import Filler
+
+
 
 import logging as lg
 
@@ -19,55 +17,51 @@ def main():
     args = utils.parse_arguments()
     # prepare les logs
     utils.set_logger()
-    # instance de chargement des catégories
-    category_downloader = CategoryDownloader()
-    # instance de chargement des produits
-    product_downloader = ProductDownloader()
 
-    if not category_downloader.fetch('France', constant.LIMIT_NB_CATEGORIES):
-        raise Exception("No category found : Abort.")
-    # TODO fusion de CategoryDownloader et ProductDownloader
-    logger.debug('Il y a %d categories à charger.', category_downloader.nb_categories)
-    category_writer = Writer("category")
-    product_writer = Writer("product")
-    product_category_writer = Writer("productcategory")
+    # option: chargement de la base
+    if args.reload:
+        Filler().start()
+        sys.exit(0)
 
-    logger.debug('Start collecting categories')
-    category_writer.add_rows(category_downloader.list_categories, Category)
-    logger.debug('End collecting categories')
+    if int(args.get_products_subst_list) > 0:
+        id = int(args.get_products_subst_list)
+        dao_product = DaoProduct()
+        products = dao_product.get_products_subst_list_by_id(id)
+        search_product = dao_product.get_product_by_id(id)
+        print("******************************************************")
+        print("Vous souhaitez un substitut pour le produit suivant :")
+        print("******************************************************")
+        print(search_product)
+        print("******************************************************")
+        print("Pur Beurre vous propose le substitut suivant :")
+        print("******************************************************")
+        for product in products:
+            print(product)
+        sys.exit(0)
 
-    logger.debug('Start writing categories')
-    category_writer.write_rows()
-    logger.debug('End writing categories')
+    to_match = args.get_products_list_by_match
+    if not str(to_match) == "":
+        dao_product = DaoProduct()
+        products = dao_product.get_products_list_by_match(to_match)
+        print("******************************************************")
+        print("Résultat de la recherche sur les mots clés suivants :")
+        print("******************************************************")
+        print(to_match)
+        print("******************************************************")
+        print("Produits correspondants :")
+        print("******************************************************")
+        for product in products:
+            print(product)
+        sys.exit(0)
 
-    # parcours des categories enregistrées
-    logger.debug('Start collecting products')
-    for category in category_downloader.list_categories:
-        logger.debug('Start collecting category "%s"', category['name'])
-        product_downloader.reset_page_counter()
-        dao_category = DaoCategory()
-        # get "our id" from "off id"
-        id_category = dao_category.get_category_id(category['id'])
-
-        # parcours des produits par catégories
-        while product_downloader.fetch(category['name'], constant.LIMIT_NB_PRODUCTS):
-            logger.debug('Start getting page #%d', product_downloader.page_counter - 1)
-            # parcours des produits de la page courante
-            new_list = product_writer.add_rows(product_downloader.list_products, Product)
-            # ajout des index dans la table de jointure
-            product_category_writer.add_rows(new_list, {"product_id": '$code', "category_id": id_category})
-            logger.debug('End collecting category "%s"', category['name'])
-            # Ecriture en base
-            logger.debug('Start writing products')
-            product_writer.write_rows()
-            logger.debug('End writing products')
-            logger.debug('Start writing product_category relations')
-            product_category_writer.join_rows()
-            logger.debug('End writing product_category relations')
-
-            logger.debug('End getting page #%d', product_downloader.page_counter - 1)
-        logger.debug('End collecting category "%s"', category['name'])
-    logger.debug('End collecting products')
+    a_tuple = args.set_substitute_product
+    if not str(a_tuple) == "":
+        r_tuple = tuple(str(a_tuple).split(','))
+        Filler().set_substitute_product(r_tuple)
+        print("******************************************************")
+        print("")
+        print("******************************************************")
+        sys.exit(0)
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ CREATE TABLE `category` (
   `url` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_off` (`id_off`),
-  KEY `idx_name` (`name`(15))
+  FULLTEXT KEY `idx_ft` (`name`)
 ) ENGINE=InnoDB;
 
 
@@ -47,11 +47,11 @@ CREATE TABLE `productcategory` (
 
 DROP TABLE IF EXISTS `substitute`;
 CREATE TABLE `substitute` (
-  `original_product_id` bigint unsigned NOT NULL,
+  `product_id` bigint unsigned NOT NULL,
   `substitute_product_id` bigint unsigned NOT NULL,
-  PRIMARY KEY (`original_product_id`,`substitute_product_id`),
+  PRIMARY KEY (`product_id`,`substitute_product_id`),
   KEY `fk_substitute_product_id` (`substitute_product_id`),
-  CONSTRAINT `fk_original_product_id` FOREIGN KEY (`original_product_id`) REFERENCES `product` (`id`),
+  CONSTRAINT `fk_product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `fk_substitute_product_id` FOREIGN KEY (`substitute_product_id`) REFERENCES `product` (`id`)
 ) ENGINE=InnoDB;
 
