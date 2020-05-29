@@ -1,4 +1,6 @@
 from core.dbconnector import DbConnector
+from core.model.category import Category
+
 
 class DaoCategory:
 
@@ -13,8 +15,31 @@ class DaoCategory:
         :param id_off: id openfoodfacts
         :return: Category
         """
-        cursor =  self.cnx.cursor()
+        cursor = self.cnx.cursor()
         cursor.execute('SELECT id FROM Category WHERE id_off = %s', (id_off,))
         cat_id = cursor.fetchone()
         cursor.close()
         return None if cat_id is None else cat_id[0]
+
+    def get_category_list(self, limit=100):
+        """
+        get a list of categorie (w.o condition)
+        :return: list json of categories
+        """
+
+        # list 2 return
+        categories_list = list()
+
+        cursor = self.cnx.cursor()
+
+        # 1rst call we must determine string comparison
+        comp_req = "SELECT * from category"
+
+        cursor.execute(comp_req)
+
+        for a_row in cursor:
+            map_row = dict(zip(cursor.column_names, a_row))
+            categories_list.append(Category.buildfrommysql(**map_row))
+
+        cursor.close()
+        return categories_list

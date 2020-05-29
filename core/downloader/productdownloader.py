@@ -1,11 +1,12 @@
-import sys
-from core import constant
 import logging as lg
+import sys
+
+from core import constant
 
 logger = lg.getLogger(__name__)
 
-class ProductDownloader:
 
+class ProductDownloader:
     """ defines product object"""
 
     # collection of caotegorie
@@ -13,7 +14,6 @@ class ProductDownloader:
 
     """ Download products from OFF API """
     _page_counter = 1
-
 
     def reset_page_counter(self):
         """ reset page counter """

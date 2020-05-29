@@ -1,14 +1,12 @@
 #!/usr/bin/python3
 # coding: utf-8
+import logging as lg
 import sys
 
 from core import utils
+from core.dao.daocategory import DaoCategory
 from core.dao.daoproduct import DaoProduct
 from core.filler import Filler
-
-
-
-import logging as lg
 
 logger = lg.getLogger(__name__)
 
@@ -22,6 +20,15 @@ def main():
     if args.reload:
         Filler().start()
         sys.exit(0)
+
+    if int(args.get_product_by_id) > 0:
+        id = int(args.get_product_by_id)
+        dao_product = DaoProduct()
+        search_product = dao_product.get_product_by_id(id)
+        print("******************************************************")
+        print("Vous cherchez le produit suivant :")
+        print("******************************************************")
+        print(search_product)
 
     if int(args.get_products_subst_list) > 0:
         id = int(args.get_products_subst_list)
@@ -54,12 +61,37 @@ def main():
             print(product)
         sys.exit(0)
 
+    category_id = args.get_product_list_by_category_id
+    if not str(category_id) == "":
+        dao_product = DaoProduct()
+        products = dao_product.get_product_list_by_category_id(category_id)
+        print("******************************************************")
+        print("Résultat de la recherche sur l'id categorie suivant:")
+        print("******************************************************")
+        print(category_id)
+        print("******************************************************")
+        print("Produits correspondants :")
+        print("******************************************************")
+        for product in products:
+            print(product)
+        sys.exit(0)
+
+    if args.get_category_list:
+        dao_category = DaoCategory()
+        categories = dao_category.get_category_list()
+        print("******************************************************")
+        print("Résultat de la recherche sur les categories :")
+        print("******************************************************")
+        for category in categories:
+            print(category)
+        sys.exit(0)
+
     a_tuple = args.set_substitute_product
     if not str(a_tuple) == "":
         r_tuple = tuple(str(a_tuple).split(','))
         Filler().set_substitute_product(r_tuple)
         print("******************************************************")
-        print("")
+        print("Insertion de la substitution effectuée.")
         print("******************************************************")
         sys.exit(0)
 

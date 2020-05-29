@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*- #
-from core import constant
 
 
 class Product():
     """ Product object """
     """ constructor """
-    def __init__(self,  **product):
+
+    def __init__(self, **product):
         self._columns_values = dict()
         self._columns_values['id'] = product['id'] if 'id' in product else None
         self._columns_values['ean_code'] = product['code'] if 'code' in product else None
@@ -14,17 +14,18 @@ class Product():
         self._columns_values['brands'] = product['brands'] if 'brands' in product else None
         self._columns_values['stores'] = product['stores'] if 'stores' in product else None
         self._columns_values['url'] = product['url'] if 'url' in product else None
-        self._columns_values['nutrition_grade'] = product['nutrition_grade_fr'] if 'nutrition_grade_fr' in product else None
-        self._columns_names =['ean_code', 'product_name', 'generic_name', 'brands', 'stores', 'url', 'nutrition_grade']
+        self._columns_values['nutrition_grade'] = product[
+            'nutrition_grade_fr'] if 'nutrition_grade_fr' in product else None
+        self._columns_names = ['ean_code', 'product_name', 'generic_name', 'brands', 'stores', 'url', 'nutrition_grade']
 
     # builder json
     @classmethod
-    def buildFromJson(cls, **product):
+    def buildfromjson(cls, **product):
         return cls(**product)
 
     # builder mysql
     @classmethod
-    def buildFromMysql(cls, **product):
+    def buildfrommysql(cls, **product):
         # get 1 map from 2 with different origins => fusion with key change
         translation = {'ean_code': 'code', 'generic_name': 'generic_name_fr', 'nutrition_grade': 'nutrition_grade_fr'}
         new_map = dict([((k in translation and (translation.get(k))) or k, v) for k, v in product.items()])

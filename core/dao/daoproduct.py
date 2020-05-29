@@ -22,7 +22,7 @@ class DaoProduct:
 
     def get_product_by_id(self, id):
         """
-        get a product objetc from his id
+        get a product object from his id
         :param id: pk
         :return: object product
         """
@@ -30,10 +30,36 @@ class DaoProduct:
         cursor.execute('SELECT * FROM Product WHERE id = %s', (id,))
 
         map_row = dict(zip(cursor.column_names, cursor.fetchone()))
-        product = Product.buildFromMysql(**map_row)
+        product = Product.buildfrommysql(**map_row)
         cursor.close()
 
         return None if id is None else product
+
+    def get_product_list_by_category_id(self, category_id, limit=100):
+        """
+        get a product object from his category_id
+        :param limit:
+        :param category_id:
+        :param id: pk
+        :return: object product list
+        """
+        # list 2 return
+        products_list = list()
+
+        cursor = self.cnx.cursor()
+        cursor.execute("SELECT * FROM Product P" \
+                       "    INNER JOIN ProductCategory PC ON P.id = PC.product_id" \
+                       " WHERE PC.category_id = %s" \
+                       " LIMIT  " + str(limit)
+                       , (category_id,))
+
+        for a_row in cursor:
+            map_row = dict(zip(cursor.column_names, a_row))
+            products_list.append(Product.buildfrommysql(**map_row))
+
+        cursor.close()
+
+        return None if category_id is None else products_list
 
     def get_products_list_by_match(self, match_keys, limit=100):
         """
@@ -61,7 +87,7 @@ class DaoProduct:
 
         for a_row in cursor:
             map_row = dict(zip(cursor.column_names, a_row))
-            products_list.append(Product.buildFromMysql(**map_row))
+            products_list.append(Product.buildfrommysql(**map_row))
 
         cursor.close()
         return None if id is None else products_list
@@ -79,7 +105,7 @@ class DaoProduct:
         cursor = self.cnx.cursor()
 
         # 1rst call we must determine string comparison
-        comp_req = "SELECT  concat(`product_name`,' ',`generic_name`,' ',`brands`)" \
+        comp_req = "SELECT concat(`product_name`,' ',`generic_name`,' ',`brands`)" \
                    " FROM Product WHERE id = '%s'"
 
         cursor.execute(comp_req, (id,))
@@ -113,7 +139,7 @@ class DaoProduct:
 
         for a_row in cursor:
             map_row = dict(zip(cursor.column_names, a_row))
-            products_list.append(Product.buildFromMysql(**map_row))
+            products_list.append(Product.buildfrommysql(**map_row))
 
         cursor.close()
         return None if id is None else products_list

@@ -1,5 +1,6 @@
-import requests
 from time import sleep
+
+import requests
 
 
 def special_get(url, payload, tries=3):
@@ -24,6 +25,6 @@ def special_get(url, payload, tries=3):
 
         if do_retry or response.status_code >= 500:
             sleep(300)
-            return special_get(url, payload, tries-1)
+            return special_get(url, payload, tries - 1)
 
     return response

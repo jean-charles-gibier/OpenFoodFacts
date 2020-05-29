@@ -1,6 +1,7 @@
-import sys
-from core import constant
 import logging as lg
+import sys
+
+from core import constant
 
 logger = lg.getLogger(__name__)
 
@@ -20,7 +21,8 @@ class CategoryDownloader:
     def nb_categories(self):
         return len(self._list_categories)
 
-    def fetch(self, origin=constant.DEFAULT_COUNTRY_ORIGIN, number=constant.LIMIT_NB_CATEGORIES, lower_limit=constant.LOW_LIMIT_NB_PRODUCTS):
+    def fetch(self, origin=constant.DEFAULT_COUNTRY_ORIGIN, number=constant.LIMIT_NB_CATEGORIES,
+              lower_limit=constant.LOW_LIMIT_NB_PRODUCTS):
         """fetch  downloads categories from OFF API
         origin : pays d'origine des relevés
         number : nombre de relevés

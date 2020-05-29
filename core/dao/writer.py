@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*- #
-import sys
-import mysql
-from core.dbconnector import DbConnector
 import logging as lg
+import sys
+
+import mysql
+
+from core.dbconnector import DbConnector
 
 logger = lg.getLogger(__name__)
 
@@ -81,7 +83,7 @@ class Writer:
                 ["((select id from product where ean_code ='" + values["product_id"] + "'), " + str(
                     values["category_id"]) + ")" for values in self._bulk_list])
         self._raw_insert_ignore_request = self._raw_insert_ignore_pattern % (
-        self._table_name, columns_names, values_list, on_duplicate)
+            self._table_name, columns_names, values_list, on_duplicate)
 
     def write_rows(self):
         """ write specified values in specified table """
@@ -139,4 +141,3 @@ class Writer:
             "columns_values": ncls,
             "columns_names": ncls.keys()
         }
-

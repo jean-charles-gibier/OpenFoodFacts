@@ -1,15 +1,14 @@
 # coding: utf-8
 
+import logging as lg
+
 from core import constant
 from core.dao.daocategory import DaoCategory
+from core.dao.writer import Writer
 from core.downloader.categorydownloader import CategoryDownloader
 from core.downloader.productdownloader import ProductDownloader
 from core.model.category import Category
 from core.model.product import Product
-from core.dao.writer import Writer
-
-
-import logging as lg
 
 logger = lg.getLogger(__name__)
 
