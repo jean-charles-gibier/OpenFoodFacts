@@ -51,7 +51,7 @@ CREATE TABLE `substitute` (
   `substitute_product_id` bigint unsigned NOT NULL,
   PRIMARY KEY (`product_id`,`substitute_product_id`),
   KEY `fk_substitute_product_id` (`substitute_product_id`),
-  CONSTRAINT `fk_product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  CONSTRAINT `fk_product_id_s` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `fk_substitute_product_id` FOREIGN KEY (`substitute_product_id`) REFERENCES `product` (`id`)
 ) ENGINE=InnoDB;
 
