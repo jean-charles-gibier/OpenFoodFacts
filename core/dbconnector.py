@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*- #
+
 from core import constant
 import json
 import mysql.connector
