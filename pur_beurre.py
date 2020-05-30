@@ -1,3 +1,10 @@
+"""Main module of pure-beurre application
+This script acts as a service that answer to the "menu" client application.
+By passing options on command line, differents requests may be answered with
+ or without parameters.
+They are described in the --help option of this script.
+python3 ./pur_beurre.py --help
+"""
 #!/usr/bin/python3
 # coding: utf-8
 import logging as lg
@@ -12,6 +19,8 @@ logger = lg.getLogger(__name__)
 
 
 def main():
+    """ main entry of this script
+    see help option for more features description """
     args = utils.parse_arguments()
     # prepare les logs
     utils.set_logger()
@@ -22,19 +31,25 @@ def main():
         sys.exit(0)
 
     if int(args.get_product_by_id) > 0:
-        id = int(args.get_product_by_id)
+        ident = int(args.get_product_by_id)
         dao_product = DaoProduct()
-        search_product = dao_product.get_product_by_id(id)
-        print("******************************************************")
-        print("Vous cherchez le produit suivant :")
-        print("******************************************************")
-        print(search_product)
+        search_product = dao_product.get_product_by_id(ident)
+        if search_product is None:
+            print("******************************************************")
+            print("Pas de produit trouvé pour cet identifiant")
+            print("******************************************************")
+        else:
+            print("******************************************************")
+            print("Vous cherchez le produit suivant :")
+            print("******************************************************")
+            print(search_product)
+        sys.exit(0)
 
     if int(args.get_products_subst_list) > 0:
-        id = int(args.get_products_subst_list)
+        ident = int(args.get_products_subst_list)
         dao_product = DaoProduct()
-        products = dao_product.get_products_subst_list_by_id(id)
-        search_product = dao_product.get_product_by_id(id)
+        products = dao_product.get_products_subst_list_by_id(ident)
+        search_product = dao_product.get_product_by_id(ident)
         print("******************************************************")
         print("Vous souhaitez un substitut pour le produit suivant :")
         print("******************************************************")
@@ -47,7 +62,7 @@ def main():
         sys.exit(0)
 
     to_match = args.get_products_list_by_match
-    if not str(to_match) == "":
+    if str(to_match) != "":
         dao_product = DaoProduct()
         products = dao_product.get_products_list_by_match(to_match)
         print("******************************************************")
@@ -62,7 +77,7 @@ def main():
         sys.exit(0)
 
     category_id = args.get_product_list_by_category_id
-    if not str(category_id) == "":
+    if str(category_id) != "":
         dao_product = DaoProduct()
         products = dao_product.get_product_list_by_category_id(category_id)
         print("******************************************************")
@@ -87,7 +102,7 @@ def main():
         sys.exit(0)
 
     a_tuple = args.set_substitute_product
-    if not str(a_tuple) == "":
+    if str(a_tuple) != "":
         r_tuple = tuple(str(a_tuple).split(','))
         Filler().set_substitute_product(r_tuple)
         print("******************************************************")

@@ -1,12 +1,18 @@
+"""DaoProduct
+This class allows access to product data
+
+"""
 from core.dbconnector import DbConnector
 from core.model.product import Product
 
 
 class DaoProduct:
-
+    """ DaoProduct """
     def __init__(self):
-        self.db = DbConnector()
-        self.cnx = self.db.handle
+        """ DaoProduct needs active cnx
+         to be functional"""
+        self.database = DbConnector()
+        self.cnx = self.database.handle
 
     def get_id_product_by_ean(self, ean):
         """
@@ -20,20 +26,21 @@ class DaoProduct:
         cursor.close()
         return None if prod_id is None else prod_id[0]
 
-    def get_product_by_id(self, id):
+    def get_product_by_id(self, ident):
         """
         get a product object from his id
         :param id: pk
         :return: object product
         """
+        product = None
         cursor = self.cnx.cursor()
-        cursor.execute('SELECT * FROM Product WHERE id = %s', (id,))
-
-        map_row = dict(zip(cursor.column_names, cursor.fetchone()))
-        product = Product.buildfrommysql(**map_row)
+        cursor.execute('SELECT * FROM Product WHERE id = %s', (ident,))
+        a_row = cursor.fetchone()
+        if a_row:
+            map_row = dict(zip(cursor.column_names, a_row))
+            product = Product.buildfrommysql(**map_row)
         cursor.close()
-
-        return None if id is None else product
+        return product
 
     def get_product_list_by_category_id(self, category_id, limit=100):
         """
@@ -77,10 +84,11 @@ class DaoProduct:
                     "inner join ProductCategory PC on PC.product_id = P.id " \
                     "        inner join Category C on PC.category_id = C.id " \
                     "WHERE " \
-                    "                            MATCH (P.`product_name`,P.`generic_name`,P.`brands`) " \
-                    "                            AGAINST ('%s' in BOOLEAN MODE) " \
-                    "                    OR " \
-                    "                            MATCH (C.`name`) AGAINST ('%s' in BOOLEAN MODE) " \
+                    "       MATCH (P.`product_name`" \
+                    "           ,P.`generic_name`,P.`brands`) " \
+                    "           AGAINST ('%s' in BOOLEAN MODE) " \
+                    "       OR " \
+                    "           MATCH (C.`name`) AGAINST ('%s' in BOOLEAN MODE) " \
                     "LIMIT  " + str(limit)
 
         cursor.execute(final_req % (match_keys, match_keys))
@@ -92,7 +100,7 @@ class DaoProduct:
         cursor.close()
         return None if id is None else products_list
 
-    def get_products_subst_list_by_id(self, id, limit=100):
+    def get_products_subst_list_by_id(self, ident, limit=100):
         """
         get a substitute product list from  id product
         :param id:  id of product to match
@@ -108,34 +116,37 @@ class DaoProduct:
         comp_req = "SELECT concat(`product_name`,' ',`generic_name`,' ',`brands`)" \
                    " FROM Product WHERE id = '%s'"
 
-        cursor.execute(comp_req, (id,))
+        cursor.execute(comp_req, (ident,))
         comp_str = cursor.fetchone()
 
-        final_req = "select  P.*, nb_shared_categories ," \
-                    "MATCH (P.`product_name`,P.`generic_name`,P.`brands`) AGAINST (" \
-                    "       '%s'" \
-                    "  IN NATURAL LANGUAGE MODE) AS score" \
-                    "    FROM (" \
-                    "        SELECT" \
-                    "            product_id," \
-                    "            COUNT(product_id) AS nb_shared_categories," \
-                    "            category_id" \
-                    "        FROM" \
-                    "           ProductCategory PC2" \
-                    "            INNER JOIN Category AS C2 ON PC2.category_id = C2.id " \
-                    "            WHERE category_id IN (" \
-                    "                SELECT category_id FROM ProductCategory WHERE Product_id = %s)" \
-                    "        GROUP BY product_id" \
-                    "       ) AS Subst" \
-                    "    INNER JOIN product AS P ON Subst.product_id = P.id" \
-                    "    INNER JOIN Category AS C ON Subst.category_id = C.id" \
-                    "    WHERE P.nutrition_grade < (" \
-                    "       SELECT nutrition_grade FROM Product WHERE id = %s" \
-                    "       )" \
-                    "ORDER BY nb_shared_categories DESC, nutrition_grade, score desc " \
-                    "LIMIT  " + str(limit)
+        if comp_str is not  None:
+            final_req = "select  P.*, nb_shared_categories ," \
+                        "MATCH (P.`product_name`,P.`generic_name`,P.`brands`) AGAINST (" \
+                        "       '%s'" \
+                        "  IN NATURAL LANGUAGE MODE) AS score" \
+                        "    FROM (" \
+                        "        SELECT" \
+                        "            product_id," \
+                        "            COUNT(product_id) AS nb_shared_categories," \
+                        "            category_id" \
+                        "        FROM" \
+                        "           ProductCategory PC2" \
+                        "            INNER JOIN Category AS C2 ON PC2.category_id = C2.id " \
+                        "            WHERE category_id IN (" \
+                        "                SELECT category_id " \
+                        "                   FROM ProductCategory " \
+                        "                WHERE Product_id = %s)" \
+                        "        GROUP BY product_id" \
+                        "       ) AS Subst" \
+                        "    INNER JOIN product AS P ON Subst.product_id = P.id" \
+                        "    INNER JOIN Category AS C ON Subst.category_id = C.id" \
+                        "    WHERE P.nutrition_grade < (" \
+                        "       SELECT nutrition_grade FROM Product WHERE id = %s" \
+                        "       )" \
+                        "ORDER BY nb_shared_categories DESC, nutrition_grade, score desc " \
+                        "LIMIT  " + str(limit)
 
-        cursor.execute(final_req % (comp_str[0], id, id))
+            cursor.execute(final_req % (comp_str[0], ident, ident))
 
         for a_row in cursor:
             map_row = dict(zip(cursor.column_names, a_row))
