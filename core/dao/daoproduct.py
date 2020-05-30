@@ -118,8 +118,9 @@ class DaoProduct:
 
         cursor.execute(comp_req, (ident,))
         comp_str = cursor.fetchone()
+        escaped_str = (comp_str[0]).replace("'", " ")
 
-        if comp_str is not  None:
+        if comp_str is not None:
             final_req = "select  P.*, nb_shared_categories ," \
                         "MATCH (P.`product_name`,P.`generic_name`,P.`brands`) AGAINST (" \
                         "       '%s'" \
@@ -146,7 +147,7 @@ class DaoProduct:
                         "ORDER BY nb_shared_categories DESC, nutrition_grade, score desc " \
                         "LIMIT  " + str(limit)
 
-            cursor.execute(final_req % (comp_str[0], ident, ident))
+            cursor.execute(final_req % (escaped_str, ident, ident))
 
         for a_row in cursor:
             map_row = dict(zip(cursor.column_names, a_row))
