@@ -21,7 +21,7 @@ logger = lg.getLogger(__name__)
 def main():
     """ main entry of this script
     see help option for more features description """
-    args = utils.parse_arguments()
+    args = utils.parse_arguments(sys.argv)
     # prepare les logs
     utils.set_logger()
 

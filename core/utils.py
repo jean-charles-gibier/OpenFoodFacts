@@ -6,7 +6,7 @@ from sys import (stdout)
 logger = lg.getLogger(__name__)
 
 
-def parse_arguments():
+def parse_arguments(argv=None):
     """Parse_arguments parsing args
      parameters :
         --datafile : name of file map without extension """
@@ -33,6 +33,10 @@ def parse_arguments():
                         help="""  Set relation product,substitute by id""", default="")
     parser.add_argument("-r", "--reload", help="Reload database from Openfactsfood services",
                         action="store_true")
+    # si on argv est passé en parametre
+    # on checke si les arguments sont présents
+    if argv is not None and len(argv) == 1:
+        parser.print_usage()
 
     return parser.parse_args()
 
