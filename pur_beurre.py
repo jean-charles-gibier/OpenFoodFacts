@@ -30,6 +30,21 @@ def main():
         Filler().start()
         sys.exit(0)
 
+    if int(args.get_category_by_id) > 0:
+        ident = int(args.get_category_by_id)
+        dao_category = DaoCategory()
+        search_category = dao_category.get_category_by_id(ident)
+        if search_category is None:
+            print("******************************************************")
+            print("Pas de categorie trouvée pour cet identifiant")
+            print("******************************************************")
+        else:
+            print("******************************************************")
+            print("Vous cherchez le produit suivant :")
+            print("******************************************************")
+            print(search_category)
+        sys.exit(0)
+
     if int(args.get_product_by_id) > 0:
         ident = int(args.get_product_by_id)
         dao_product = DaoProduct()

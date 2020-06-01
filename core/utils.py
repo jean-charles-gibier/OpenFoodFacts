@@ -19,6 +19,8 @@ def parse_arguments(argv=None):
         """, default="100000")
     parser.add_argument("-gpi", "--get_product_by_id", help="""  Get product object by id
         """, default="0")
+    parser.add_argument("-gci", "--get_category_by_id", help="""  Get category object by id
+        """, default="0")
     parser.add_argument("-gcl", "--get_category_list", help="""  Get category list
         """, action="store_true")
     parser.add_argument("-gplc", "--get_product_list_by_category_id",

@@ -36,11 +36,13 @@ transitions_possibles = {
           'Trigger': 'os.system("{} {} -gcl")'.format(CURR_PYTHON, SERVICE_PB)},
     'D': {'Label': 'Lister les produits d''une categorie',
           'Trigger': 'os.system("{} {} -gplc _curr_category_")'.format(CURR_PYTHON, SERVICE_PB),
-          'AskForValues': {'curr_category'}},
+          'AskForValues': {'curr_category' : 'un identifiant categorie'}},
     'E': {'Label': 'Lister les produits par mots clés',
-          'Trigger': ''},
+          'Trigger': 'os.system("{} {} -gplm _key_words_")'.format(CURR_PYTHON, SERVICE_PB),
+           'AskForValues': {'key_words' : 'le(s) mot(s) clé(s) (wildcard "*" accepté)'}},
     'F': {'Label': 'Afficher une categorie',
-          'Trigger': ''},
+          'Trigger': 'os.system("{} {} -gci _curr_category_")'.format(CURR_PYTHON, SERVICE_PB),
+          'AskForValues': {'curr_category' : 'un identifiant categorie'}},
     'G': {'Label': 'Afficher un produit',
           'Trigger': ''},
     'H': {'Label': 'Afficher un produit par ean',
@@ -166,8 +168,8 @@ class Menu:
                 # here we execute the piece of code
                 # linked with the selected item menu
                 if 'AskForValues' in next_trans.params:
-                    for val in next_trans.params['AskForValues']:
-                        local_val = eval("input('Choisissez un identifiant :')")
+                    for val,label in next_trans.params['AskForValues'].items():
+                        local_val = eval("input('Choisissez " + label + " :')")
                         cmd = cmd.replace('_' + val + '_', local_val)
 
                 if cmd != "":

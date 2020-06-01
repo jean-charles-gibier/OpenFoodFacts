@@ -21,6 +21,23 @@ class DaoCategory:
         cursor.close()
         return None if cat_id is None else cat_id[0]
 
+    def get_category_by_id(self, ident):
+        """
+        get a category object by his id
+        :param id: pk
+        :return: category product
+        """
+        category = None
+        cursor = self.cnx.cursor()
+        cursor.execute('SELECT * FROM Category WHERE id = %s', (ident,))
+        a_row = cursor.fetchone()
+        if a_row:
+            map_row = dict(zip(cursor.column_names, a_row))
+            category = Category.buildfrommysql(**map_row)
+        cursor.close()
+        return category
+
+
     def get_category_list(self, limit=100):
         """
         get a list of categorie (w.o condition)
