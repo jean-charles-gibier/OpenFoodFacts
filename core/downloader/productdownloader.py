@@ -1,12 +1,17 @@
-import logging as lg
+# coding: utf-8
+"""
+module de chargement des produits
+"""
+
 import sys
+import logging as lg
 
 from core import constant
 
 logger = lg.getLogger(__name__)
 
 
-class ProductDownloader:
+class ProductDownloader(object):
     """ defines product object"""
 
     # collection of caotegorie
@@ -21,6 +26,7 @@ class ProductDownloader:
 
     @property
     def nb_products(self):
+        """ return nb fetched products """
         return len(self._list_products)
 
     @property

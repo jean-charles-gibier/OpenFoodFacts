@@ -1,7 +1,7 @@
 """argument parsing """
 import argparse
 import logging as lg
-from sys import (stdout)
+from sys import stdout
 
 logger = lg.getLogger(__name__)
 

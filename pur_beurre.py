@@ -1,3 +1,4 @@
+# coding: utf-8
 """Main module of pure-beurre application
 This script acts as a service that answer to the "menu" client application.
 By passing options on command line, differents requests may be answered with
@@ -6,14 +7,14 @@ They are described in the --help option of this script.
 python3 ./pur_beurre.py --help
 """
 # !/usr/bin/python3
-# coding: utf-8
-import logging as lg
+from __future__ import print_function
 import sys
-
+import logging as lg
 from core import utils
 from core.dao.daocategory import DaoCategory
 from core.dao.daoproduct import DaoProduct
 from core.filler import Filler
+
 
 logger = lg.getLogger(__name__)
 

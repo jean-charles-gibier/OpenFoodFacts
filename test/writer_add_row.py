@@ -1,8 +1,8 @@
 import sys
+import unittest
 
 sys.path.append('..')
 sys.path.append('.')
-import unittest
 
 
 class MyTestCase(unittest.TestCase):

@@ -13,17 +13,20 @@ from core.model.product import Product
 logger = lg.getLogger(__name__)
 
 
-class Filler:
-
+class Filler(object):
+    """ classe en charge du chargement de la base """
     @classmethod
     def start(cls):
+        """ unique mehode de chargement """
         # instance de chargement des catégories
         category_downloader = CategoryDownloader()
         # instance de chargement des produits
         product_downloader = ProductDownloader()
 
-        if not category_downloader.fetch(constant.DEFAULT_COUNTRY_ORIGIN, constant.LIMIT_NB_CATEGORIES):
-            raise Exception("No category found for %s : Abort.".format(constant.DEFAULT_COUNTRY_ORIGIN))
+        if not category_downloader.fetch(constant.DEFAULT_COUNTRY_ORIGIN,
+                                         constant.LIMIT_NB_CATEGORIES):
+            raise Exception("No category found for {} : Abort."
+                            .format(constant.DEFAULT_COUNTRY_ORIGIN))
 
         logger.debug('Il y a %d categories à charger.', category_downloader.nb_categories)
         category_writer = Writer("category")
@@ -53,7 +56,8 @@ class Filler:
                 # parcours des produits de la page courante
                 new_list = product_writer.add_rows(product_downloader.list_products, Product)
                 # ajout des index dans la table de jointure
-                product_category_writer.add_rows(new_list, {"product_id": '$code', "category_id": id_category})
+                product_category_writer.add_rows(new_list,
+                                                 {"product_id": '$code', "category_id": id_category})
                 logger.debug('End collecting category "%s"', category['name'])
                 # Ecriture en base
                 logger.debug('Start writing products')
@@ -69,7 +73,9 @@ class Filler:
 
     @classmethod
     def set_substitute_product(cls, pc_tuple):
+        """  enregistre les liasons subistitut / produit """
         product_id, substitute_product_id = pc_tuple[0], pc_tuple[1]
         product_substitute = Writer("substitute")
-        product_substitute.add_rows({1}, {"product_id": product_id, "substitute_product_id": substitute_product_id})
+        product_substitute.add_rows({1}, {"product_id": product_id,
+                                          "substitute_product_id": substitute_product_id})
         product_substitute.write_rows()

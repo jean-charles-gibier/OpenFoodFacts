@@ -1,12 +1,13 @@
+"""
+    special_get fetch with special strategy
+    to handle http responses & possible errors
+"""
 from time import sleep
-
 import requests
 
 
 def special_get(url, payload, tries=3):
     """
-    fetch with special strategy
-    to handle http responses & possible errors
     url : url to request
     payload : json params
     tries : nb to try

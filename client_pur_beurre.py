@@ -1,6 +1,4 @@
-import sys
-import os
-
+# -*- coding: utf-8 -*- #
 """
     ***** Client Pur beurre *****
   Rappel des actions disponibles auxquelles ce menu fait appel
@@ -26,57 +24,77 @@ import os
   -gsp, --get_recorded_substitutes_product
                         Get recorded substitutes list
   -r, --reload          Reload database from Openfactsfood services
-j"""
+
+# note l'"import" du module "os" est necessaire pour le code des fct eval()
+"""
+
+from __future__ import print_function
+import os
+import sys
 
 SERVICE_PB = './pur_beurre.py'
 CURR_PYTHON = sys.executable
-curr_category = 0
-curr_product = 0
-curr_subsitution = 0
 
-transitions_possibles = {
+TRANSITIONS_POSSIBLES = {
     'A': {'Label': 'Acceder au menu principal',
           'Trigger': ''},
     'B': {'Label': 'Recharger la base',
-          'Trigger': 'os.system("{} {} -r")'.format(CURR_PYTHON, SERVICE_PB)},
+          'Trigger':
+              'os.system("{} {} -r")'.format(
+                  CURR_PYTHON, SERVICE_PB)},
     'C': {'Label': 'Lister les categories',
-          'Trigger': 'os.system("{} {} -gcl")'.format(CURR_PYTHON, SERVICE_PB)},
+          'Trigger':
+              'os.system("{} {} -gcl")'.format(
+                  CURR_PYTHON, SERVICE_PB)},
     'D': {'Label': 'Lister les produits d\'une categorie',
-          'Trigger': 'os.system("{} {} -gplc _curr_category_")'.format(CURR_PYTHON, SERVICE_PB),
+          'Trigger':
+              'os.system("{} {} -gplc _curr_category_")'.format(
+                  CURR_PYTHON, SERVICE_PB),
           'InputValues': {'curr_category': 'un identifiant categorie'}},
     'E': {'Label': 'Lister les produits par mots clés',
-          'Trigger': 'os.system("{} {} -gplm _key_words_")'.format(CURR_PYTHON, SERVICE_PB),
-          'InputValues': {'key_words': 'mot(s) clé(s) wildcard "*" accepté'}},
+          'Trigger':
+              'os.system("{} {} -gplm _key_words_")'.format(
+                  CURR_PYTHON, SERVICE_PB),
+          'InputValues': {'key_words': 'les mot(s)'
+                                       ' clé(s) wildcard "*" accepté'}},
     'F': {'Label': 'Afficher une categorie',
-          'Trigger': 'os.system("{} {} -gci _curr_category_")'.format(CURR_PYTHON, SERVICE_PB),
+          'Trigger': 'os.system("{} {} -gci _curr_category_")'.format(
+              CURR_PYTHON, SERVICE_PB),
           'InputValues': {'curr_category': 'un identifiant categorie'}},
     'G': {'Label': 'Afficher un produit',
-          'Trigger': 'os.system("{} {} -gpi _curr_product_")'.format(CURR_PYTHON, SERVICE_PB),
+          'Trigger': 'os.system("{} {} -gpi _curr_product_")'.format(
+              CURR_PYTHON, SERVICE_PB),
           'InputValues': {'curr_product': 'un identifiant produit'}},
     'H': {'Label': 'Afficher un produit par ean',
           'Trigger': ''},
     'I': {'Label': 'Enregistrer un produit de susbstitution',
-          #  On va enregistrer une liason entre curr_product et curr_subsitution
-          'Trigger': 'os.system("{} {} -ssp _curr_product_,_curr_subsitution_")'.format(CURR_PYTHON, SERVICE_PB),
+          # Pour enregistrer une liason entre curr_product et curr_subsitution
+          'Trigger':
+              'os.system("{} {} -ssp _curr_product_,_curr_subsitution_")'
+              .format(CURR_PYTHON, SERVICE_PB),
           'InputValues': {'curr_subsitution': 'un identifiant subtitution'},
           'LastValues': {'curr_product': 'Identifiant produit'}},
     'J': {'Label': 'Enregistrer un produit à subsituer',
-          'Trigger': 'curr_product = registered_values[\'un identifiant produit\']'},
+          'Trigger':
+              'curr_product = registered_values[\'un identifiant produit\']'},
     'K': {'Label': 'Lister les susbstitutions pour un produit',
-          'Trigger': 'os.system("{} {} -gpsl _curr_product_")'.format(CURR_PYTHON, SERVICE_PB),
+          'Trigger': 'os.system("{} {} -gpsl _curr_product_")'.format(
+              CURR_PYTHON, SERVICE_PB),
           'InputValues': {'curr_product': 'un identifiant produit'}},
     'L': {'Label': 'Lister les susbstitutions pour ce produit',
-          'Trigger': 'os.system("{} {} -gpsl _curr_product_")'.format(CURR_PYTHON, SERVICE_PB),
+          'Trigger': 'os.system("{} {} -gpsl _curr_product_")'.format(
+              CURR_PYTHON, SERVICE_PB),
           'LastValues': {'curr_product': 'Identifiant produit'}},
     'M': {'Label': 'Lister la base de substitutions',
-          'Trigger': 'os.system("{} {} -gsp")'.format(CURR_PYTHON, SERVICE_PB)},
+          'Trigger': 'os.system("{} {} -gsp")'.format(
+              CURR_PYTHON, SERVICE_PB)},
     'N': {'Label': 'Quitter',
           'Trigger': 'sys.exit()'},
     'O': {'Label': 'Revenir au menu principal',
           'Trigger': ''}
 }
 
-etats_possibles = {
+ETATS_POSSIBLES = {
     1: 'Menu principal',
     2: 'Base chargée',
     3: 'Resultat lister les categories',
@@ -92,7 +110,7 @@ etats_possibles = {
     13: 'Bye'
 }
 
-paths = {
+PATHS = {
     # menu principal
     (1, 2): 'B',  # recharger base
     (1, 3): 'C',  # Lister categories
@@ -100,8 +118,8 @@ paths = {
     (1, 12): 'M',  # Lister la base des substitutions
     (1, 13): 'N',  # Quitter
     # Base chargee
-    (2, 1): 'N',  # revenir au menu principal
-    (2, 13): 'M',  # Quitter
+    (2, 1): 'O',  # revenir au menu principal
+    (2, 13): 'N',  # Quitter
     # Lister les categories
     (3, 4): 'D',  # Lister les produits d'une categorie
     (3, 6): 'F',  # Afficher une catégorie par id
@@ -146,23 +164,24 @@ paths = {
 }
 
 
-class Menu:
+class Menu(object):
     """ Menu process """
     transitions = None
     etats = None
 
     @classmethod
     def load(cls):
+        """ loads configurtion menu """
         cls.etats = dict()
-        for num, etat in etats_possibles.items():
+        for num, etat in ETATS_POSSIBLES.items():
             cls.etats.update({num: Etat(etat)})
 
         cls.transitions = dict()
-        for letter, transition in transitions_possibles.items():
+        for letter, transition in TRANSITIONS_POSSIBLES.items():
             cls.transitions.update({letter: Transition(transition)})
 
         cls.root = None
-        for path, action in paths.items():
+        for path, action in PATHS.items():
             e_from, e_to = path
             node = Menu.etats[e_from]
             node.aller_vers(
@@ -199,7 +218,8 @@ class Menu:
                         registered_values[val] = local_val
                 if 'LastValues' in next_trans.params:
                     for val, label in next_trans.params['LastValues'].items():
-                        cmd = cmd.replace('_' + val + '_', registered_values[val])
+                        cmd = cmd.replace('_' + val + '_',
+                                          registered_values[val])
                 if cmd != "":
                     eval(cmd)
             else:
@@ -218,7 +238,8 @@ class Menu:
                          for num, trans_etat
                          in enumerate(local_dico.items())]
             menu_string = " | ".join(menu_list)
-            print("Choisissez l'une des options suivantes :\n[{}]".format(menu_string))
+            print("Choisissez l'une des options suivantes :\n[{}]"
+                  .format(menu_string))
             entry = input('>>> ')
             choix = process_input(entry, new_trans)
             if choix is not None and choix < len(new_etats):
@@ -226,38 +247,45 @@ class Menu:
 
     @classmethod
     def start(cls, entry):
+        """ just show """
         cls.show(entry)
 
     def __init__(self):
         pass
 
 
-class Etat:
+class Etat(object):
+    """ definit les etats du menu"""
     def __init__(self, params):
+        """ instancie les etats du menu"""
         if isinstance(params, str):
             self.description = params
             self.liaisons = dict()
-        pass
 
     def aller_vers(self, autre_etat, avec_transition):
+        """ action permettant de passer à un autre etat """
         avec_transition.lier(self, autre_etat)
         self.liaisons[avec_transition] = autre_etat
-        pass
 
 
-class Transition:
+class Transition(object):
+    """ definit les transitions du menu"""
     def __init__(self, params):
+        """ instancie les transitions du menu"""
         self.params = params
         self.transitions = list()
 
     def lier(self, un_etat, un_autre_etat):
+        """ Autorise le passage d'un etat à l'autre """
         self.transitions.append((un_etat, un_autre_etat))
 
 
 def main():
+    """ demarre le menu
+    On verifie que le script 'service' est présent en local """
     try:
-        f = open(SERVICE_PB)
-        f.close()
+        f_test = open(SERVICE_PB)
+        f_test.close()
     except IOError:
         print("Le fichier {} doit être présent dans"
               " le repertoire courant.".format(SERVICE_PB))

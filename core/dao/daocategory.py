@@ -1,9 +1,12 @@
+"""
+Gestionnaire des data Category
+"""
 from core.dbconnector import DbConnector
 from core.model.category import Category
 
 
-class DaoCategory:
-
+class DaoCategory(object):
+    """ definit les acces aux modele de donnees """
     def __init__(self):
         self.db = DbConnector()
         self.cnx = self.db.handle
@@ -50,7 +53,7 @@ class DaoCategory:
         cursor = self.cnx.cursor()
 
         # 1rst call we must determine string comparison
-        comp_req = "SELECT * from category"
+        comp_req = "SELECT * from category LIMIT  " + str(limit)
 
         cursor.execute(comp_req)
 

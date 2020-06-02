@@ -1,12 +1,16 @@
-import logging as lg
+# coding: utf-8
+"""
+module de chargement des catégories
+"""
 import sys
+import logging as lg
 
 from core import constant
 
 logger = lg.getLogger(__name__)
 
 
-class CategoryDownloader:
+class CategoryDownloader(object):
     """ defines category object"""
 
     # a list of category id_off
@@ -19,6 +23,7 @@ class CategoryDownloader:
 
     @property
     def nb_categories(self):
+        """ get number of categories """
         return len(self._list_categories)
 
     def fetch(self, origin=constant.DEFAULT_COUNTRY_ORIGIN, number=constant.LIMIT_NB_CATEGORIES,
@@ -38,11 +43,13 @@ class CategoryDownloader:
         }
 
         try:
-            response = core.downloader.customrequest.special_get(constant.API_URL_CATEGORIES, payload)
+            response = core.downloader.customrequest.special_get(
+                constant.API_URL_CATEGORIES, payload)
             data = response.json()
             # on ne selectionne que les catégories avec un nombre "consequent" de produits
-            self._list_categories = [categorie for categorie in data['tags'] if categorie["products"] > lower_limit]
+            self._list_categories = [categorie for categorie in data['tags']
+                                     if categorie["products"] > lower_limit]
         except:
-            logger.error("Unexpected error:", sys.exc_info()[0])
+            logger.error("Unexpected error: %s", sys.exc_info()[0])
 
         return len(self._list_categories) > 0

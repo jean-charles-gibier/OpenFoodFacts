@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*- #
+"""
+constantes pur beurre
+TODO : passer en parametre au demarrage
+"""
 # limite nb de produits par catégorie
 # (en dessous de laquelle on ne charge pas les produits attachés)
 LOW_LIMIT_NB_PRODUCTS = 10000

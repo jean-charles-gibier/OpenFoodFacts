@@ -6,7 +6,7 @@ from core.dbconnector import DbConnector
 from core.model.product import Product
 
 
-class DaoProduct:
+class DaoProduct(object):
     """ DaoProduct """
     def __init__(self):
         """ DaoProduct needs active cnx
@@ -169,18 +169,19 @@ class DaoProduct:
 
         cursor = self.cnx.cursor()
         cursor.execute("select " \
-                       "p2.generic_name AS NOM_PRODUIT," \
+                       "p2.product_name AS NOM_PRODUIT, " \
+                       "p2.generic_name AS GENERIQUE_PRODUIT," \
                        "p2.brands AS MARQUE_PRODUIT, " \
                        "p2.nutrition_grade  AS GRADE_PRODUIT, " \
-                       "'=>' AS `A subsituer par`, " \
-                       "p1.generic_name AS NOM_SUBSTITUT, " \
+                       "p1.product_name AS NOM_SUBSTITUT, " \
+                       "p1.generic_name AS GENERIQUE_SUBSTITUT, " \
                        "p1.brands AS MARQUE_SUBSTITUT, " \
                        "p1.nutrition_grade AS GRADE_SUBSTITUT" \
                        "    from substitute s " \
                        "    inner join product p1 on  p1.id = s.substitute_product_id" \
                        "	inner join product p2 on  p2.id = s.product_id" \
                        " LIMIT  " + str(limit)
-                       )
+                      )
 
         for a_row in cursor:
             map_row = dict(zip(cursor.column_names, a_row))
@@ -189,4 +190,3 @@ class DaoProduct:
         cursor.close()
 
         return substitutes_list
-
