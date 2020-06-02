@@ -135,4 +135,9 @@ Choisir l'option 2 du menu principal
 
 ## affichage des produits liés à une categories
 Sélectionner l'option 1, puis l'identifiant correspondant à la catégorie désirée.
-![Menu principal](doc/US3.png)
+![Menu principal](doc/US4.png)
+
+
+## sélection d'un produit de la catégorie
+
+
