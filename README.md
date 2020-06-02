@@ -112,7 +112,13 @@ optional arguments:
   -gsp, --get_recorded_substitutes_product
                         Get recorded substitutes list
   -r, --reload          Reload database from Openfactsfood services
-j````
+````
 
 
 # description des fonctionalités
+
+## chargement de la base 
+![Menu principal](/doc/US1.png)
+
+Choisir l'option 1 du menu principa!
+
