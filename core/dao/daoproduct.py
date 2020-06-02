@@ -89,6 +89,7 @@ class DaoProduct:
                     "           AGAINST ('%s' in BOOLEAN MODE) " \
                     "       OR " \
                     "           MATCH (C.`name`) AGAINST ('%s' in BOOLEAN MODE) " \
+                    "group by P.id "\
                     "LIMIT  " + str(limit)
 
         cursor.execute(final_req % (match_keys, match_keys))
@@ -113,14 +114,15 @@ class DaoProduct:
         cursor = self.cnx.cursor()
 
         # 1rst call we must determine string comparison
-        comp_req = "SELECT concat(`product_name`,' ',`generic_name`,' ',`brands`)" \
+        comp_req = "SELECT concat(ifnull(`product_name`,''),' '," \
+                   "ifnull(`generic_name`, ''),' ',ifnull(`brands`,''))" \
                    " FROM Product WHERE id = '%s'"
 
         cursor.execute(comp_req, (ident,))
         comp_str = cursor.fetchone()
-        escaped_str = (comp_str[0]).replace("'", " ")
 
-        if comp_str is not None:
+        if all(comp_str):
+            escaped_str = (comp_str[0]).replace("'", " ")
             final_req = "select  P.*, nb_shared_categories ," \
                         "MATCH (P.`product_name`,P.`generic_name`,P.`brands`) AGAINST (" \
                         "       '%s'" \

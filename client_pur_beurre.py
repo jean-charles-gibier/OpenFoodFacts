@@ -34,28 +34,37 @@ transitions_possibles = {
           'Trigger': 'os.system("{} {} -r")'.format(CURR_PYTHON, SERVICE_PB)},
     'C': {'Label': 'Lister les categories',
           'Trigger': 'os.system("{} {} -gcl")'.format(CURR_PYTHON, SERVICE_PB)},
-    'D': {'Label': 'Lister les produits d''une categorie',
+    'D': {'Label': 'Lister les produits d\'une categorie',
           'Trigger': 'os.system("{} {} -gplc _curr_category_")'.format(CURR_PYTHON, SERVICE_PB),
-          'AskForValues': {'curr_category' : 'un identifiant categorie'}},
+          'AskForValues': {'curr_category': 'un identifiant categorie'}},
     'E': {'Label': 'Lister les produits par mots clés',
           'Trigger': 'os.system("{} {} -gplm _key_words_")'.format(CURR_PYTHON, SERVICE_PB),
-           'AskForValues': {'key_words' : 'le(s) mot(s) clé(s) (wildcard "*" accepté)'}},
+          'AskForValues': {'key_words': 'le(s) mot(s) clé(s) (wildcard "*" accepté)'}},
     'F': {'Label': 'Afficher une categorie',
           'Trigger': 'os.system("{} {} -gci _curr_category_")'.format(CURR_PYTHON, SERVICE_PB),
-          'AskForValues': {'curr_category' : 'un identifiant categorie'}},
+          'AskForValues': {'curr_category': 'un identifiant categorie'}},
     'G': {'Label': 'Afficher un produit',
-          'Trigger': ''},
+          'Trigger': 'os.system("{} {} -gpi _curr_product_")'.format(CURR_PYTHON, SERVICE_PB),
+          'AskForValues': {'curr_product': 'un identifiant produit'}},
     'H': {'Label': 'Afficher un produit par ean',
           'Trigger': ''},
     'I': {'Label': 'Enregistrer un produit de susbstitution',
-          'Trigger': ''},
+#          'Trigger': 'print("OK on va enregistrer une liason entre {} et {}...".format('
+#                     'registered_values[\'curr_product\'],registered_values[\'curr_subsitution\']))',
+          'Trigger': 'os.system("{} {} -ssp _curr_product_,_curr_subsitution_")'.format(CURR_PYTHON, SERVICE_PB),
+          'AskForValues': {'curr_subsitution': 'un identifiant subtitution'},
+          'LastValues': {'curr_product': 'Identifiant produit'}},
     'J': {'Label': 'Enregistrer un produit à subsituer',
-          'Trigger': ''},
-    'K': {'Label': 'Lister les susbstitutions d'' un produit',
-          'Trigger': ''},
-    'L': {'Label': 'Quitter',
+          'Trigger': 'curr_product = registered_values[\'un identifiant produit\']'},
+    'K': {'Label': 'Lister les susbstitutions pour un produit',
+          'Trigger': 'os.system("{} {} -gpsl _curr_product_")'.format(CURR_PYTHON, SERVICE_PB),
+          'AskForValues': {'curr_product': 'un identifiant produit'}},
+    'L': {'Label': 'Lister les susbstitutions pour ce produit',
+          'Trigger': 'os.system("{} {} -gpsl _curr_product_")'.format(CURR_PYTHON, SERVICE_PB),
+          'LastValues': {'curr_product': 'Identifiant produit'}},
+    'M': {'Label': 'Quitter',
           'Trigger': 'sys.exit()'},
-    'M': {'Label': 'Revenir au menu principal',
+    'N': {'Label': 'Revenir au menu principal',
           'Trigger': ''}
 }
 
@@ -63,12 +72,12 @@ etats_possibles = {
     1: 'Menu principal',
     2: 'Base chargée',
     3: 'Resultat lister les categories',
-    4: 'Resultat lister les produits d''une categorie',
+    4: 'Resultat lister les produits d\'une categorie',
     5: 'Resultat lister les produits par mots clés',
-    6: 'Resultat affichage d''une categorie',
-    7: 'Resultat affichage d''un produit par id',
-    8: 'Resultat affichage d''un produit par ean',
-    9: 'Resultat subsitution enregistrée',
+    6: 'Resultat affichage d\'une categorie',
+    7: 'Resultat affichage d\'un produit par id',
+    8: 'Resultat affichage d\'un produit par ean',
+    9: 'Resultat liste de subsitutions pdt en cours',
     10: 'Resultat subsitutable enregistré',
     11: 'Resultat liste de subsitutions',
     12: 'Bye'
@@ -76,51 +85,51 @@ etats_possibles = {
 
 paths = {
     # menu principal
-    (1, 2): 'B', # recharger base
-    (1, 3): 'C', # Lister categories
+    (1, 2): 'B',  # recharger base
+    (1, 3): 'C',  # Lister categories
     (1, 5): 'E',  # Lister produits par mots clés
-    (1, 12): 'L', # Quitter
+    (1, 12): 'M',  # Quitter
     # Base chargee
-    (2, 1): 'M', # revenir au menu principal
-    (2, 12): 'L', # Quitter
+    (2, 1): 'N',  # revenir au menu principal
+    (2, 12): 'M',  # Quitter
     # Lister les categories
-    (3, 1): 'M', # revenir au menu principal
-    (3, 4): 'D', # Lister les produits d'une categorie
-    (3, 6): 'F', # Afficher une catégorie par id
-    (3, 12): 'L',  # Quitter
+    (3, 4): 'D',  # Lister les produits d'une categorie
+    (3, 6): 'F',  # Afficher une catégorie par id
+    (3, 1): 'N',  # revenir au menu principal
+    (3, 12): 'M',  # Quitter
     # Lister  les produits d'une categorie
-    (4, 1): 'M',  # revenir au menu principal
     (4, 7): 'G',  # Afficher un produit
-    (4, 12): 'L',  # Quitter
+    (4, 1): 'N',  # revenir au menu principal
+    (4, 12): 'M',  # Quitter
     # Lister les produits par mots clés
-    (5, 1): 'M',  # revenir au menu principal
     (5, 7): 'G',  # Afficher un produit par id
-    (5, 12): 'L',  # Quitter
+    (5, 1): 'N',  # revenir au menu principal
+    (5, 12): 'M',  # Quitter
     # Afficher  les catégories par id
-    (6, 1): 'M',  # revenir au menu principal
-    (6, 4): 'D', # Lister les produits d'une categorie
-    (6, 12): 'L',  # Quitter
+    (6, 4): 'D',  # Lister les produits d'une categorie
+    (6, 1): 'N',  # revenir au menu principal
+    (6, 12): 'M',  # Quitter
     # Afficher un produit
-    (7, 1): 'M',  # revenir au menu principal
-    (7, 9): 'I',  # choisir comme subsitituable
-    (7, 10): 'J',  # choisir comme subsititution
-    (7, 12): 'L',  # Quitter
+    (7, 9): 'L',  # Lister les substitutions du pdt en cours
+    (7, 11): 'K',  # Lister les substitutions
+    (7, 1): 'N',  # revenir au menu principal
+    (7, 12): 'M',  # Quitter
     # Afficher un produit Par Ean
-    (8, 1): 'M',  # revenir au menu principal
-    (8, 9): 'I',  # choisir comme subsitituable
-    (8, 10): 'J',  # choisir comme subsititution
-    (8, 12): 'L',  # Quitter
+    (8, 9): 'L',  # Lister les substitutions du pdt en cours
+    (8, 11): 'K',  # Lister les substitutions
+    (8, 1): 'N',  # revenir au menu principal
+    (8, 12): 'M',  # Quitter
     # choisir comme subsitituable
-    (9, 1): 'M',  # revenir au menu principal
-    (9, 12): 'L',  # Quitter
+    (9, 10): 'I',  # Enregistrer subsitution
+    (9, 1): 'N',  # revenir au menu principal
+    (9, 12): 'M',  # Quitter
     # choisir comme subsititution
-    (10, 1): 'M',  # revenir au menu principal
-    (10, 12): 'L',  # Quitter
+    (10, 1): 'N',  # revenir au menu principal
+    (10, 12): 'M',  # Quitter
     # Afficher une liste de subtitution
-    (11, 1): 'M',  # revenir au menu principal
     (11, 7): 'G',  # Afficher le produit
-    (10, 12): 'L',  # Quitter
-
+    (11, 1): 'N',  # revenir au menu principal
+    (11, 12): 'M',  # Quitter
 }
 
 
@@ -152,6 +161,9 @@ class Menu:
     @classmethod
     def show(cls, entry):
         """ run the configured menu """
+        # valeurs colectées
+        registered_values = {}
+
         def process_input(entry, new_trans):
             """ sub process validates choice and executes trigger"""
             nb_choix = len(new_trans)
@@ -168,10 +180,13 @@ class Menu:
                 # here we execute the piece of code
                 # linked with the selected item menu
                 if 'AskForValues' in next_trans.params:
-                    for val,label in next_trans.params['AskForValues'].items():
+                    for val, label in next_trans.params['AskForValues'].items():
                         local_val = eval("input('Choisissez " + label + " :')")
                         cmd = cmd.replace('_' + val + '_', local_val)
-
+                        registered_values[val] = local_val
+                if 'LastValues' in next_trans.params:
+                    for val, label in next_trans.params['LastValues'].items():
+                        cmd = cmd.replace('_' + val + '_', registered_values[val])
                 if cmd != "":
                     eval(cmd)
             else:

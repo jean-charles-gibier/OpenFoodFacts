@@ -94,7 +94,8 @@ class Writer:
 
         # exclusivité en écriture pour assurer une suite cohérente d'id autoincrementés
         cursor.execute('LOCK TABLES {} WRITE'.format(self._table_name))
-
+#        print("====> {}".format(self._raw_insert_ignore_request))
+#        print("====> {}".format(str(self._bulk_list)))
         try:
             cursor.executemany(
                 self._raw_insert_ignore_request, self._bulk_list
