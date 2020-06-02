@@ -20,7 +20,7 @@ Le programme **pur_beurre.py** orésente le fonctionalités suivantes :
 - presenter une suite de services au programme **client_pur_beurre.py** 
 
 Le programme **client_pur_beurre.py**  est une interface exploitant les fonctionalités de **pur_beurre.py**.
-Cette interface présente une suite de menus en mode texte. (Les différentes "user stories" seront définies en fonction de la navigation dans l'arborescence du menu).
+Cette interface présente une suite de menus en mode texte. En guise de "user stories", nous définirons les différentes navigation dans l'arborescence des choix.
 
 Sur la plan technique / architecture, ces deux programmes programmes doivent :
 - définir un model clair (produit categorie substitus, many 2 many) 
