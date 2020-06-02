@@ -128,7 +128,7 @@ Le programme charge tout les produits de la base OFF à partir des critères sui
 Tous le produits appaartenent aux categories <françaises> contenant de plus de 10.000 produits <br>
 [cf constantes associées au chargement pour toute modification.](https://github.com/jean-charles-gibier/OpenFoodFacts/blob/develop/core/constant.py)
 
-## Affichager les categories
+### Affichager les categories
 Choisir l'option 2 du menu principal
 ![Menu principal](doc/US3.png)
 
@@ -142,7 +142,7 @@ Sélectionner l'option 1, puis l'identifiant correspondant au produit désiré.
 
 ## Afficher la liste des substitutions possibles pour le produit selectionné
 Sélectionner l'option 1 pour obtenir les produits substituables<br>
-Ces produits sont affichés par ordre de correspondance selon les critères suivants :
+Ces produits sont affichés par ordre de correspondance selon les critères suivants :<br>
 - Le nombre de catégories en commun
 - le nutriscore le moins élevé
 - le score de la fonction "match" mysql sur les chammps name et marque.
@@ -153,7 +153,8 @@ Sélectionner l'option 1, puis l'identifiant correspondant au produit de substit
 ![Menu principal](doc/US5.png)
 
 ## Lister les produits substitués
-Pour vérifier que la substitution est bien enregistrée
+Pour vérifier que la substitution est bien enregistrée<br>
 Sélectionner l'option 1, puis l'option 4 pour lister les substitutions
+![Menu principal](doc/US6.png)
 
 
