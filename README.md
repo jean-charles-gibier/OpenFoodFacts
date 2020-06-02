@@ -137,7 +137,14 @@ Choisir l'option 2 du menu principal
 Sélectionner l'option 1, puis l'identifiant correspondant à la catégorie désirée.
 ![Menu principal](doc/US4.png)
 
-
 ## sélection d'un produit de la catégorie
+Sélectionner l'option 1, puis l'identifiant correspondant au produit désiré.
+![Menu principal](doc/US4.png)
 
-
+## Afficher la liste des substitutions du produit selectionné
+Sélectionner l'option 1 pour obtenir les produits substituables<br>
+Ces produits sont affichés par ordre de correspondance selon les critères suivants :
+- Le nombre de catégories en commun
+- le nutriscore le moins élevé
+- le score de la fonction "match" mysql sur les chammps name et marque.
+![Menu principal](doc/US5.png)
