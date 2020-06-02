@@ -128,3 +128,11 @@ Le programme charge tout les produits de la base OFF à partir des critères sui
 Tous le produits appaartenent aux categories <françaises> contenant de plus de 10.000 produits <br>
 [cf constantes associées au chargement pour toute modification.](https://github.com/jean-charles-gibier/OpenFoodFacts/blob/develop/core/constant.py)
 
+## affichage des categories
+ 
+Choisir l'option 2 du menu principal
+![Menu principal](doc/US3.png)
+
+## affichage des produits liés à une categories
+Sélectionner l'option 1, puis l'identifiant correspondant à la catégorie désirée.
+![Menu principal](doc/US3.png)
