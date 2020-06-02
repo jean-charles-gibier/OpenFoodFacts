@@ -118,7 +118,7 @@ optional arguments:
 # description des fonctionalités
 
 ## chargement de la base 
-![Menu principal](/doc/US1.png)
+![Menu principal](/jean-charles-gibier/OpenFoodFacts/doc/US1.png)
 
 Choisir l'option 1 du menu principa!
 
