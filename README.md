@@ -3,7 +3,35 @@
 status : [![CircleCI](https://circleci.com/gh/jean-charles-gibier/OpenFoodFacts.svg?style=shield)](https://app.circleci.com/pipelines/github/jean-charles-gibier/OpenFoodFacts)
 
 ## Projet #5 DA Python / OC
- Que souhaitez-vous que votre programme fasse ?
+
+Les scripts **pur_beurre.py** et **client_pur_beurre.py** forment un programme interagissant avec la base Open Food Facts pour en récupérer les aliments, les comparer et proposer à l'utilisateur un substitut plus sain à l'aliment qui lui fait envie.
+
+(Les besoins de ce programme sont [décrits ici](https://openclassrooms.com/fr/projects/157/assignment))
+
+Le programme **pur_beurre.py** orésente le fonctionalités suivantes :
+
+- requeter sur demandel'API REST Openfastfood
+- interperéter la réponse en JSON, déterminer sa nature (OK 200 / KO x00)
+- naviguer dans la structure pour en extraire les données utiles
+- instancier des objets avec ces données (Categorie, Produit, substitut etc.)
+- enregistrer ces objets dans une base de données (en mode raw => par paquet de X000)
+- enregistrer les relations entre ces objets
+- restituer ces données en fonction de critères choisis (mots clés ou catégorie)
+- presenter une suite de services au programme **client_pur_beurre.py** 
+
+Le programme **client_pur_beurre.py**  est une interface exploitant les fonctionalités de **pur_beurre.py**.
+Cette interface présente une suite de menus en mode texte. (Les différentes "user stories" seront définies en fonction de la navigation dans l'arborescence du menu).
+
+Sur la plan technique / architecture, ces deux programmes programmes doivent :
+- définir un model clair (produit categorie substitus, many 2 many) 
+- respecter la PEP8 /257
+- avoir des packages définis (pas de classe "fourre tout")
+- découpler Presentation  / Model / View 
+- etre "objet "=> limiter le procedural et les "boucles" / listes de compréhension / principe SOLID etc.
+- présenter catégorie / produit avec sous classes => une mission par classe : filtrage / nettoyage / enregistrement 
+
+La planification du projet a été organisée sur :
+[ Jira ](https://jcgibierscompany.atlassian.net/jira/software/projects/CO/boards/2)
 
 
 # pur beurre
@@ -56,41 +84,3 @@ optional arguments:
                         Display interface : 'text' or 'graphic'
 ````
 # description des fonctionalités
-Les fonctionalités requises pour cet exercice sont [décrites ici](https://openclassrooms.com/fr/projects/156/assignment)
-
-Pour exploiter l'interface graphique pygame, le programme va lire un fichier texte (argument '--datafile') 
-de 15x15 caractères séparés par des "retour chariot". Chaque ligne de ce fichier représente une ligne du jeu .<br>
-Dans cette ligne, chaque caractère symbolise un des éléments suivants (au choix) :
-- une case de jeu standard (char ' ' espace ou Ascii 0x20)
-- un élément de mur (char '#' hastag)
-- la case de départ (char 'S' )
-- la case d'arrivée' (char 'E' )
-
-Ce fichier texte est situé dans le repertoire 'resources'.
-Le programme interprète le plan du fichier et place 3 items (Aiguille, Tube, Ether) plus un personnage (Gardien), au hasard sur les cases accessibles du plan.<br>
-(les items seront disposés de manière à ne pas bloquer le jeu : le garde ne devra pas bloquer l'accès aux items à collecter)
-
-(Bonne question).
-
-Il doit :
-- requeter (sur demande) une API REST (faire un POC de quelques lignes capable de ramener une réponse de OFF)
-- interperéter la réponse en JSON, déterminer sa nature OK 200 / KO x00
-- naviguer dans la structure pour en extraire les données utiles
-- instancier des objets avec ces données (Categorie, Produit etc.)
-- enregistrer ces objets dans une Bdd (en mode raw => par paquet de X000)
-- enregistrer les relations entre ces objets
-- restituer ces données en fonction de critères choisis
-- presenter une interface de requetage & administration de la base 
-- cf user story décrite dans la [présentation du prj](https://openclassrooms.com/fr/projects/157/assignment) 
-
-Sur la plan technique / architecture du prg 
-=> il doit :
-- définir un model clair (produit categorie : many 2 many  => + magasins ?) 
-- respecter la PEP8 /257
-- avoir des packages définis (cf prj 3 / pas de classe fourre tout)
-- découpler Presentation  / Model / View 
-- etre "object "=> limiter le procedural et les "boucles" / listes de compréhension / principe SOLID etc.
-- présenter catégorie / produit avec sous classes => une mission par classe : filtrage / nettoyage / enregistrement 
-
-Suivi de l'organisation sur :
-[ Jira ](https://jcgibierscompany.atlassian.net/jira/software/projects/CO/boards/2)
