@@ -2,24 +2,31 @@ import sys
 import os
 
 """
-    ***** Client Purre beurre *****
-  Rappel des services disponibles :
-    
- -gpi GET_PRODUCT_BY_ID, --get_product_by_id GET_PRODUCT_BY_ID
+    ***** Client Pur beurre *****
+  Rappel des actions disponibles auxquelles ce menu fait appel
+  via le service 'pur_beurre.py' :
+  -gpi GET_PRODUCT_BY_ID, --get_product_by_id GET_PRODUCT_BY_ID
                         Get product object by id
+  -gci GET_CATEGORY_BY_ID, --get_category_by_id GET_CATEGORY_BY_ID
+                        Get category object by id
   -gcl, --get_category_list
                         Get category list
-  -gplc GET_PRODUCT_LIST_BY_CATEGORY_ID, --get_product_list_by_category_id GET_PRODUCT_LIST_BY_CATEGORY_ID
+  -gplc GET_PRODUCT_LIST_BY_CATEGORY_ID, --get_product_list_by_category_id
+                        GET_PRODUCT_LIST_BY_CATEGORY_ID
                         Get product list by category_id
-  -gpsl GET_PRODUCTS_SUBST_LIST, --get_products_subst_list GET_PRODUCTS_SUBST_LIST
+  -gpsl GET_PRODUCTS_SUBST_LIST, --get_products_subst_list
+                        GET_PRODUCTS_SUBST_LIST
                         Get product subsitute list by id
-  -gplm GET_PRODUCTS_LIST_BY_MATCH, --get_products_list_by_match GET_PRODUCTS_LIST_BY_MATCH
+  -gplm GET_PRODUCTS_LIST_BY_MATCH, --get_products_list_by_match
+                        GET_PRODUCTS_LIST_BY_MATCH
                         Get product by match on key words between the names of
                         products or categories. Wildcad '*' is allowed.
   -ssp SET_SUBSTITUTE_PRODUCT, --set_substitute_product SET_SUBSTITUTE_PRODUCT
                         Set relation product,substitute by id
+  -gsp, --get_recorded_substitutes_product
+                        Get recorded substitutes list
   -r, --reload          Reload database from Openfactsfood services
-"""
+j"""
 
 SERVICE_PB = './pur_beurre.py'
 CURR_PYTHON = sys.executable
@@ -36,35 +43,36 @@ transitions_possibles = {
           'Trigger': 'os.system("{} {} -gcl")'.format(CURR_PYTHON, SERVICE_PB)},
     'D': {'Label': 'Lister les produits d\'une categorie',
           'Trigger': 'os.system("{} {} -gplc _curr_category_")'.format(CURR_PYTHON, SERVICE_PB),
-          'AskForValues': {'curr_category': 'un identifiant categorie'}},
+          'InputValues': {'curr_category': 'un identifiant categorie'}},
     'E': {'Label': 'Lister les produits par mots clés',
           'Trigger': 'os.system("{} {} -gplm _key_words_")'.format(CURR_PYTHON, SERVICE_PB),
-          'AskForValues': {'key_words': 'le(s) mot(s) clé(s) (wildcard "*" accepté)'}},
+          'InputValues': {'key_words': 'mot(s) clé(s) wildcard "*" accepté'}},
     'F': {'Label': 'Afficher une categorie',
           'Trigger': 'os.system("{} {} -gci _curr_category_")'.format(CURR_PYTHON, SERVICE_PB),
-          'AskForValues': {'curr_category': 'un identifiant categorie'}},
+          'InputValues': {'curr_category': 'un identifiant categorie'}},
     'G': {'Label': 'Afficher un produit',
           'Trigger': 'os.system("{} {} -gpi _curr_product_")'.format(CURR_PYTHON, SERVICE_PB),
-          'AskForValues': {'curr_product': 'un identifiant produit'}},
+          'InputValues': {'curr_product': 'un identifiant produit'}},
     'H': {'Label': 'Afficher un produit par ean',
           'Trigger': ''},
     'I': {'Label': 'Enregistrer un produit de susbstitution',
-#          'Trigger': 'print("OK on va enregistrer une liason entre {} et {}...".format('
-#                     'registered_values[\'curr_product\'],registered_values[\'curr_subsitution\']))',
+          #  On va enregistrer une liason entre curr_product et curr_subsitution
           'Trigger': 'os.system("{} {} -ssp _curr_product_,_curr_subsitution_")'.format(CURR_PYTHON, SERVICE_PB),
-          'AskForValues': {'curr_subsitution': 'un identifiant subtitution'},
+          'InputValues': {'curr_subsitution': 'un identifiant subtitution'},
           'LastValues': {'curr_product': 'Identifiant produit'}},
     'J': {'Label': 'Enregistrer un produit à subsituer',
           'Trigger': 'curr_product = registered_values[\'un identifiant produit\']'},
     'K': {'Label': 'Lister les susbstitutions pour un produit',
           'Trigger': 'os.system("{} {} -gpsl _curr_product_")'.format(CURR_PYTHON, SERVICE_PB),
-          'AskForValues': {'curr_product': 'un identifiant produit'}},
+          'InputValues': {'curr_product': 'un identifiant produit'}},
     'L': {'Label': 'Lister les susbstitutions pour ce produit',
           'Trigger': 'os.system("{} {} -gpsl _curr_product_")'.format(CURR_PYTHON, SERVICE_PB),
           'LastValues': {'curr_product': 'Identifiant produit'}},
-    'M': {'Label': 'Quitter',
+    'M': {'Label': 'Lister la base de substitutions',
+          'Trigger': 'os.system("{} {} -gsp")'.format(CURR_PYTHON, SERVICE_PB)},
+    'N': {'Label': 'Quitter',
           'Trigger': 'sys.exit()'},
-    'N': {'Label': 'Revenir au menu principal',
+    'O': {'Label': 'Revenir au menu principal',
           'Trigger': ''}
 }
 
@@ -78,9 +86,10 @@ etats_possibles = {
     7: 'Resultat affichage d\'un produit par id',
     8: 'Resultat affichage d\'un produit par ean',
     9: 'Resultat liste de subsitutions pdt en cours',
-    10: 'Resultat subsitutable enregistré',
-    11: 'Resultat liste de subsitutions',
-    12: 'Bye'
+    10: 'Resultat subsitutions enregistrées',
+    11: 'Resultat liste de subsitutions proposées',
+    12: 'Resultat affichage de la base de subsitutions',
+    13: 'Bye'
 }
 
 paths = {
@@ -88,48 +97,52 @@ paths = {
     (1, 2): 'B',  # recharger base
     (1, 3): 'C',  # Lister categories
     (1, 5): 'E',  # Lister produits par mots clés
-    (1, 12): 'M',  # Quitter
+    (1, 12): 'M',  # Lister la base des substitutions
+    (1, 13): 'N',  # Quitter
     # Base chargee
     (2, 1): 'N',  # revenir au menu principal
-    (2, 12): 'M',  # Quitter
+    (2, 13): 'M',  # Quitter
     # Lister les categories
     (3, 4): 'D',  # Lister les produits d'une categorie
     (3, 6): 'F',  # Afficher une catégorie par id
-    (3, 1): 'N',  # revenir au menu principal
-    (3, 12): 'M',  # Quitter
+    (3, 1): 'O',  # revenir au menu principal
+    (3, 13): 'N',  # Quitter
     # Lister  les produits d'une categorie
     (4, 7): 'G',  # Afficher un produit
-    (4, 1): 'N',  # revenir au menu principal
-    (4, 12): 'M',  # Quitter
+    (4, 1): 'O',  # revenir au menu principal
+    (4, 13): 'N',  # Quitter
     # Lister les produits par mots clés
     (5, 7): 'G',  # Afficher un produit par id
-    (5, 1): 'N',  # revenir au menu principal
-    (5, 12): 'M',  # Quitter
+    (5, 1): 'O',  # revenir au menu principal
+    (5, 13): 'N',  # Quitter
     # Afficher  les catégories par id
     (6, 4): 'D',  # Lister les produits d'une categorie
-    (6, 1): 'N',  # revenir au menu principal
-    (6, 12): 'M',  # Quitter
+    (6, 1): 'O',  # revenir au menu principal
+    (6, 13): 'N',  # Quitter
     # Afficher un produit
     (7, 9): 'L',  # Lister les substitutions du pdt en cours
     (7, 11): 'K',  # Lister les substitutions
-    (7, 1): 'N',  # revenir au menu principal
-    (7, 12): 'M',  # Quitter
+    (7, 1): 'O',  # revenir au menu principal
+    (7, 13): 'N',  # Quitter
     # Afficher un produit Par Ean
     (8, 9): 'L',  # Lister les substitutions du pdt en cours
     (8, 11): 'K',  # Lister les substitutions
-    (8, 1): 'N',  # revenir au menu principal
-    (8, 12): 'M',  # Quitter
+    (8, 1): 'O',  # revenir au menu principal
+    (8, 13): 'N',  # Quitter
     # choisir comme subsitituable
     (9, 10): 'I',  # Enregistrer subsitution
-    (9, 1): 'N',  # revenir au menu principal
-    (9, 12): 'M',  # Quitter
+    (9, 1): 'O',  # revenir au menu principal
+    (9, 13): 'M',  # Quitter
     # choisir comme subsititution
-    (10, 1): 'N',  # revenir au menu principal
-    (10, 12): 'M',  # Quitter
+    (10, 1): 'O',  # revenir au menu principal
+    (10, 13): 'N',  # Quitter
     # Afficher une liste de subtitution
     (11, 7): 'G',  # Afficher le produit
-    (11, 1): 'N',  # revenir au menu principal
-    (11, 12): 'M',  # Quitter
+    (11, 1): 'O',  # revenir au menu principal
+    (11, 13): 'N',  # Quitter
+    # Afficher la base de subtitution
+    (12, 1): 'O',  # revenir au menu principal
+    (12, 13): 'N',  # Quitter
 }
 
 
@@ -179,8 +192,8 @@ class Menu:
                 cmd = str(next_trans.params['Trigger'])
                 # here we execute the piece of code
                 # linked with the selected item menu
-                if 'AskForValues' in next_trans.params:
-                    for val, label in next_trans.params['AskForValues'].items():
+                if 'InputValues' in next_trans.params:
+                    for val, label in next_trans.params['InputValues'].items():
                         local_val = eval("input('Choisissez " + label + " :')")
                         cmd = cmd.replace('_' + val + '_', local_val)
                         registered_values[val] = local_val
@@ -197,13 +210,15 @@ class Menu:
         next_etat = Menu.etats[entry]
         while True:
             local_dico = next_etat.liaisons
-            new_etats = [trans_etat[1] for num, trans_etat in enumerate(local_dico.items())]
-            new_trans = [trans_etat[0] for num, trans_etat in enumerate(local_dico.items())]
+            new_etats = [trans_etat[1] for num, trans_etat
+                         in enumerate(local_dico.items())]
+            new_trans = [trans_etat[0] for num, trans_etat
+                         in enumerate(local_dico.items())]
             menu_list = [str(num + 1) + ': ' + trans_etat[0].params['Label']
                          for num, trans_etat
                          in enumerate(local_dico.items())]
             menu_string = " | ".join(menu_list)
-            print("Choisissez parmi l'une des options suivantes :\n[{}]".format(menu_string))
+            print("Choisissez l'une des options suivantes :\n[{}]".format(menu_string))
             entry = input('>>> ')
             choix = process_input(entry, new_trans)
             if choix is not None and choix < len(new_etats):
@@ -244,7 +259,8 @@ def main():
         f = open(SERVICE_PB)
         f.close()
     except IOError:
-        print("Le fichier {} doit être présent dans le repertoire courant.".format(SERVICE_PB))
+        print("Le fichier {} doit être présent dans"
+              " le repertoire courant.".format(SERVICE_PB))
         sys.exit(-1)
 
     Menu.load()

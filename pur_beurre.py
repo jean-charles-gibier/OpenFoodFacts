@@ -5,7 +5,7 @@ By passing options on command line, differents requests may be answered with
 They are described in the --help option of this script.
 python3 ./pur_beurre.py --help
 """
-#!/usr/bin/python3
+# !/usr/bin/python3
 # coding: utf-8
 import logging as lg
 import sys
@@ -114,6 +114,16 @@ def main():
         print("******************************************************")
         for category in categories:
             print(category)
+        sys.exit(0)
+
+    if args.get_recorded_substitutes_product:
+        dao_product = DaoProduct()
+        list_substitutes = dao_product.get_recorded_substitutes_product()
+        print("******************************************************")
+        print("Résultat des substitutions enregistrées (produit => substitut):")
+        print("******************************************************")
+        for substitute in list_substitutes:
+            print(str(substitute))
         sys.exit(0)
 
     a_tuple = args.set_substitute_product

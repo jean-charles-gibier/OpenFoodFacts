@@ -29,7 +29,7 @@ class DaoProduct:
     def get_product_by_id(self, ident):
         """
         get a product object from his id
-        :param id: pk
+        :param ident: pk
         :return: object product
         """
         product = None
@@ -47,7 +47,6 @@ class DaoProduct:
         get a product object from his category_id
         :param limit:
         :param category_id:
-        :param id: pk
         :return: object product list
         """
         # list 2 return
@@ -72,6 +71,7 @@ class DaoProduct:
         """
         get a substitute product list from  id product
         :param match_keys: string that contains key words to find
+        :lparam imit: limit
         :return: list json of products
         """
 
@@ -104,7 +104,7 @@ class DaoProduct:
     def get_products_subst_list_by_id(self, ident, limit=100):
         """
         get a substitute product list from  id product
-        :param id:  id of product to match
+        :param ident:  id of product to match
         :return: list json of products
         """
 
@@ -157,3 +157,36 @@ class DaoProduct:
 
         cursor.close()
         return None if id is None else products_list
+
+    def get_recorded_substitutes_product(self, limit=100):
+        """
+        get the recorded substitutes
+        :param limit:
+        :return: dict join p1 / p2 list
+        """
+        # list 2 return
+        substitutes_list = list()
+
+        cursor = self.cnx.cursor()
+        cursor.execute("select " \
+                       "p2.generic_name AS NOM_PRODUIT," \
+                       "p2.brands AS MARQUE_PRODUIT, " \
+                       "p2.nutrition_grade  AS GRADE_PRODUIT, " \
+                       "'=>' AS `A subsituer par`, " \
+                       "p1.generic_name AS NOM_SUBSTITUT, " \
+                       "p1.brands AS MARQUE_SUBSTITUT, " \
+                       "p1.nutrition_grade AS GRADE_SUBSTITUT" \
+                       "    from substitute s " \
+                       "    inner join product p1 on  p1.id = s.substitute_product_id" \
+                       "	inner join product p2 on  p2.id = s.product_id" \
+                       " LIMIT  " + str(limit)
+                       )
+
+        for a_row in cursor:
+            map_row = dict(zip(cursor.column_names, a_row))
+            substitutes_list.append(map_row)
+
+        cursor.close()
+
+        return substitutes_list
+

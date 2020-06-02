@@ -33,6 +33,9 @@ def parse_arguments(argv=None):
         """, default="")
     parser.add_argument("-ssp", "--set_substitute_product",
                         help="""  Set relation product,substitute by id""", default="")
+    parser.add_argument("-gsp", "--get_recorded_substitutes_product",
+                        help="""  Get recorded substitutes list
+        """, action="store_true")
     parser.add_argument("-r", "--reload", help="Reload database from Openfactsfood services",
                         action="store_true")
     # si on argv est passé en parametre
