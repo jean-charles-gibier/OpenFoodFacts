@@ -4,7 +4,7 @@ status : [![CircleCI](https://circleci.com/gh/jean-charles-gibier/OpenFoodFacts.
 
 ## Projet #5 DA Python / OC
 
-Les scripts **pur_beurre.py** et **client_pur_beurre.py** forment un programme interagissant avec la base Open Food Facts pour en récupérer les aliments, les comparer et proposer à l'utilisateur un substitut plus sain à l'aliment qui lui fait envie.
+Les scripts **pur_beurre.py** et **client_pur_beurre.py** forment une suite interagissant avec la base Open Food Facts pour en récupérer les aliments, les comparer et proposer à l'utilisateur un substitut plus sain à l'aliment qui lui fait envie.
 
 (Les besoins de ce programme sont [décrits ici](https://openclassrooms.com/fr/projects/157/assignment))
 
