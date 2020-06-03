@@ -23,7 +23,7 @@ Le programme **client_pur_beurre.py**  est une interface exploitant les fonction
 Cette interface présente une suite de menus en mode texte. En guise de "user stories", nous définirons les différentes navigation dans l'arborescence des choix.
 
 Sur la plan technique / architecture, ces deux programmes programmes doivent :
-- définir un model clair (produit categorie substitus, many 2 many) 
+- définir un model clair (produit categorie substitut (jointure many 2 many)) 
 - respecter la PEP8 /257
 - avoir des packages définis (pas de classe "fourre tout")
 - découpler Presentation  / Model / View 
