@@ -132,15 +132,15 @@ Tous le produits appaartenent aux categories <françaises> contenant de plus de 
 Choisir l'option 2 du menu principal
 ![Menu principal](doc/US3.png)
 
-## Afficher les produits liés à une categories
+### Afficher les produits liés à une categories
 Sélectionner l'option 1, puis l'identifiant correspondant à la catégorie désirée.
 ![Menu principal](doc/US4.png)
 
-## Sélectioner un produit de la catégorie
+### Sélectioner un produit de la catégorie
 Sélectionner l'option 1, puis l'identifiant correspondant au produit désiré.
 ![Menu principal](doc/US4.png)
 
-## Afficher la liste des substitutions possibles pour le produit selectionné
+### Afficher la liste des substitutions possibles pour le produit selectionné
 Sélectionner l'option 1 pour obtenir les produits substituables<br>
 Ces produits sont affichés par ordre de correspondance selon les critères suivants :<br>
 - Le nombre de catégories en commun
@@ -148,13 +148,27 @@ Ces produits sont affichés par ordre de correspondance selon les critères suiv
 - le score de la fonction "match" mysql sur les chammps name et marque.
 ![Menu principal](doc/US5.png)
 
-## Enregistrer un produit comme substituable
+### Enregistrer un produit comme substituable
 Sélectionner l'option 1, puis l'identifiant correspondant au produit de substitution
-![Menu principal](doc/US5.png)
-
-## Lister les produits substitués
-Pour vérifier que la substitution est bien enregistrée<br>
-Sélectionner l'option 1, puis l'option 4 pour lister les substitutions
 ![Menu principal](doc/US6.png)
 
+### Lister les produits substitués
+Pour vérifier que la substitution est bien enregistrée<br>
+Sélectionner l'option 1, puis l'option 4 pour lister les substitutions
+![Menu principal](doc/US7.png)
 
+## Recherche des produits par mots clés
+La recherche directe de produits par mots clés est une alternative à la recherche par catégories.<br>
+A partir du menu principal, selectionner l'option 3 "Lister les produits par mots clés".<br>
+Il est possible d'entrer un ou plusieurs mots clés séparés par le caractère 'etoile' <br>
+Puis choisir directementun produit à substituer parmi la liste resultante : 
+![Menu principal](doc/US8.png)
+
+### Afficher le produit substituable
+![Menu principal](doc/US9.png)
+Puis séléctionner l'option 1 'Lister les susbstitutions pour ce produit'<br>
+La suite des opération se déroule ensuite comme avec le choic par catégories. 
+
+
+# MCD
+![Modele de donnée](doc/model_opendoodfacts_1.svg)
