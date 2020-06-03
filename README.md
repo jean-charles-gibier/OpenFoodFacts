@@ -138,7 +138,6 @@ Sélectionner l'option 1, puis l'identifiant correspondant à la catégorie dés
 
 ### Sélectioner un produit de la catégorie
 Sélectionner l'option 1, puis l'identifiant correspondant au produit désiré.
-![Menu principal](doc/US4.png)
 
 ### Afficher la liste des substitutions possibles pour le produit selectionné
 Sélectionner l'option 1 pour obtenir les produits substituables<br>
