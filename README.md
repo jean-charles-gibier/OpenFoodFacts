@@ -144,7 +144,7 @@ Sélectionner l'option 1 pour obtenir les produits substituables<br>
 Ces produits sont affichés par ordre de correspondance selon les critères suivants :<br>
 - Le nombre de catégories en commun
 - le nutriscore le moins élevé
-- le score de la fonction "match" mysql sur les chammps name et marque.
+- le score de la fonction "match" mysql sur les champs product_name et name.
 ![Menu principal](doc/US5.png)
 
 ### Enregistrer un produit comme substituable
