@@ -57,7 +57,7 @@ modifier la configuration :
 # cd ../resources
 # vim database.json.to_configure
 ````
-modifier les parametres de connexion et savegarder sous 'database.json'
+modifier les parametres de connexion et sauvegarder sous 'database.json'
 
 lancer/tester
 ````
