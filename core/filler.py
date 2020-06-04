@@ -48,7 +48,7 @@ class Filler(object):
             product_downloader.reset_page_counter()
             dao_category = DaoCategory()
             # get "our id" from "off id"
-            id_category = dao_category.get_category_id(category['id'])
+            category_id = dao_category.get_category_id(category['id'])
 
             # parcours des produits par catégories
             while product_downloader.fetch(category['name'], constant.LIMIT_NB_PRODUCTS):
@@ -57,14 +57,16 @@ class Filler(object):
                 new_list = product_writer.add_rows(product_downloader.list_products, Product)
                 # ajout des index dans la table de jointure
                 product_category_writer.add_rows(new_list,
-                                                 {"product_id": '$code', "category_id": id_category})
+                                                 {"product_id": '$code', "category_id": category_id})
                 logger.debug('End collecting category "%s"', category['name'])
                 # Ecriture en base
                 logger.debug('Start writing products')
                 product_writer.write_rows()
                 logger.debug('End writing products')
                 logger.debug('Start writing product_category relations')
-                product_category_writer.join_rows()
+                product_category_writer.join_rows(
+                    "((select id from product where ean_code ='{{product_id}}')," +
+                    "{{category_id}})")
                 logger.debug('End writing product_category relations')
 
                 logger.debug('End getting page #%d', product_downloader.page_counter - 1)
