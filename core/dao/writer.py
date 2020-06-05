@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*- #
 import logging as lg
 import sys
+import re
 
 import mysql
 
@@ -65,7 +66,7 @@ class Writer:
 
         return json_list
 
-    def _build_raw_request(self, mode):
+    def _build_raw_request(self, mode, where_clause=None):
         """ build insert request
         mode :
         1 : PLACEHOLDER_MODE => requête 'executemany' avec placeholder "python_connector"
@@ -79,9 +80,18 @@ class Writer:
             values_list = ', '.join(['%(' + col_name + ')s' for col_name in self._columns_names])
             values_list = '(' + values_list + ')'
         else:
-            values_list = ', '.join(
-                ["((select id from product where ean_code ='" + values["product_id"] + "'), " + str(
-                    values["category_id"]) + ")" for values in self._bulk_list])
+            value_names = re.findall(r'{{([^}]*)}}', where_clause)
+            completion = re.split(r'{{[^}]*}}', where_clause)
+            final_list = []
+
+            for bulk_value in self._bulk_list:
+                result = [None] * (len(value_names) + len(completion))
+                result[::2] = completion
+                result[1::2] = [str(bulk_value[vn]) for vn in value_names]
+                final_list.append(''.join(result))
+
+            values_list = ', '.join(final_list)
+
         self._raw_insert_ignore_request = self._raw_insert_ignore_pattern % (
             self._table_name, columns_names, values_list, on_duplicate)
 
@@ -111,9 +121,9 @@ class Writer:
         cnx.commit()
         cnx.close()
 
-    def join_rows(self):
+    def join_rows(self, where_clause=None):
         """ write simple jointure many 2 many table """
-        self._build_raw_request(self.INLINE_MODE)
+        self._build_raw_request(self.INLINE_MODE, where_clause)
         db = DbConnector()
         cnx = db.handle
         cursor = cnx.cursor()
