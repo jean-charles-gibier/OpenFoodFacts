@@ -41,7 +41,7 @@ def main():
             print("******************************************************")
         else:
             print("******************************************************")
-            print("Vous cherchez le produit suivant :")
+            print("Vous avez selectionné la categorie suivante :")
             print("******************************************************")
             print(search_category)
         sys.exit(0)
@@ -56,7 +56,7 @@ def main():
             print("******************************************************")
         else:
             print("******************************************************")
-            print("Vous cherchez le produit suivant :")
+            print("Vous avez selectionné le produit suivant :")
             print("******************************************************")
             print(search_product)
         sys.exit(0)
@@ -74,7 +74,7 @@ def main():
         print("Pur Beurre vous propose le substitut suivant :")
         print("******************************************************")
         for product in products:
-            print(product)
+            product.list_item()
         sys.exit(0)
 
     to_match = args.get_products_list_by_match
@@ -89,7 +89,7 @@ def main():
         print("Produits correspondants :")
         print("******************************************************")
         for product in products:
-            print(product)
+            product.list_item()
         sys.exit(0)
 
     category_id = args.get_product_list_by_category_id
@@ -104,7 +104,7 @@ def main():
         print("Produits correspondants :")
         print("******************************************************")
         for product in products:
-            print(product)
+            product.list_item()
         sys.exit(0)
 
     if args.get_category_list:
@@ -114,7 +114,7 @@ def main():
         print("Résultat de la recherche sur les categories :")
         print("******************************************************")
         for category in categories:
-            print(category)
+            category.list_item()
         sys.exit(0)
 
     if args.get_recorded_substitutes_product:
@@ -124,7 +124,15 @@ def main():
         print("Résultat des substitutions enregistrées (produit => substitut):")
         print("******************************************************")
         for substitute in list_substitutes:
-            print(str(substitute))
+            print('Produit :')
+            print(' '.join([substitute[ikey]
+                            for ikey in substitute.keys()
+                            if str(ikey).endswith('_PRODUIT')]))
+            print('Substitut :')
+            print(' '.join([substitute[ikey]
+                            for ikey in substitute.keys()
+                            if str(ikey).endswith('_SUBSTITUT')]))
+            print('-----------')
         sys.exit(0)
 
     a_tuple = args.set_substitute_product
