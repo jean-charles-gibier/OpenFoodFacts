@@ -130,44 +130,46 @@ Tous les produits appartenant aux categories <françaises> contenant de plus de 
 [cf constantes associées au chargement pour toute modification.](https://github.com/jean-charles-gibier/OpenFoodFacts/blob/develop/core/constant.py)
 
 ### Affichager les categories
-Choisir l'option 2 du menu principal
+Choisir la catégorie à afficher en selectionnant son identifiant. 
 ![Menu principal](doc/US3.png)
 
-### Afficher les produits liés à une categories
-Sélectionner l'option 1, puis l'identifiant correspondant à la catégorie désirée.
+### Afficher les produits liés à une categorie
+Sélectionner l'option 1, les produits de la catégorie désirée s'affichent.
 ![Menu principal](doc/US4.png)
 
 ### Sélectioner un produit de la catégorie
 Sélectionner l'option 1, puis l'identifiant correspondant au produit désiré.
+![Menu principal](doc/US5.png)
 
 ### Afficher la liste des substitutions possibles pour le produit selectionné
 Sélectionner l'option 1 pour obtenir les produits substituables<br>
 Ces produits sont affichés par ordre de correspondance selon les critères suivants :<br>
 - Le nombre de catégories en commun
 - le nutriscore le moins élevé
-- le score de la fonction "match" mysql sur les champs product_name et name.
-![Menu principal](doc/US5.png)
+- le score de la fonction "match" mysql sur les champs product, name et marque.
+![Menu principal](doc/US6.png)
 
 ### Enregistrer un produit comme substituable
 Sélectionner l'option 1, puis l'identifiant correspondant au produit de substitution
-![Menu principal](doc/US6.png)
+![Menu principal](doc/US7.png)
 
 ### Lister les produits substitués
 Pour vérifier que la substitution est bien enregistrée<br>
-Sélectionner l'option 1, puis l'option 4 pour lister les substitutions
-![Menu principal](doc/US7.png)
+Sélectionner l'option 2, pour lister les substitutions
+![Menu principal](doc/US8.png)
 
 ## Recherche des produits par mots clés
 La recherche directe de produits par mots clés est une alternative à la recherche par catégories.<br>
 A partir du menu principal, selectionner l'option 3 "Lister les produits par mots clés".<br>
 Il est possible d'entrer un ou plusieurs mots clés séparés par le caractère 'etoile' <br>
 Puis choisir directementun produit à substituer parmi la liste resultante : 
-![Menu principal](doc/US8.png)
+![Menu principal](doc/US9.png)
 
 ### Afficher le produit substituable
-![Menu principal](doc/US9.png)
+![Menu principal](doc/US10.png)
+... And son ...
 Puis séléctionner l'option 1 'Lister les susbstitutions pour ce produit'<br>
-La suite des opération se déroule ensuite comme avec le choic par catégories. 
+La suite des opération se déroule ensuite comme avec le choix par catégories. 
 
 
 # MCD
