@@ -8,9 +8,9 @@ Les scripts **pur_beurre.py** et **client_pur_beurre.py** forment une suite inte
 
 (Les besoins du projet sont [décrits ici](https://openclassrooms.com/fr/projects/157/assignment))
 
-Le programme **pur_beurre.py** orésente le fonctionalités suivantes :
+Le programme **pur_beurre.py** présente le fonctionnalités suivantes  :
 
-- requeter sur demandel'API REST Openfastfood
+- requêter sur demandel'API REST Openfastfood
 - interperéter la réponse en JSON, déterminer sa nature (OK 200 / KO x00)
 - naviguer dans la structure pour en extraire les données utiles
 - instancier des objets avec ces données (Categorie, Produit, substitut etc.)
@@ -24,6 +24,7 @@ Cette interface présente une suite de menus en mode texte. En guise de "user st
 
 Sur la plan technique / architecture, ces deux programmes programmes doivent :
 - définir un model clair (produit categorie substitut (jointure many 2 many)) 
+
 - respecter la PEP8 /257
 - avoir des packages définis (pas de classe "fourre tout")
 - découpler Presentation  / Model / View 

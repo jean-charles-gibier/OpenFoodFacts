@@ -30,6 +30,35 @@ class Product():
             ['ean_code', 'product_name', 'generic_name',
              'brands', 'stores', 'url', 'nutrition_grade']
 
+    def __str__(self):
+        """ print product in std way """
+        return "{:<30}: {}\n".format('Identifiant', str(self.ident)) + \
+               "{:<30}: {}\n".format('Code ean', self.ean_code) + \
+               "{:<30}: {}\n".format('Nom', self.name) + \
+               "{:<30}: {}\n".format('Nom generique', self.generic_name) + \
+               "{:<30}: {}\n".format('Marque', self.brands) + \
+               "{:<30}: {}\n".format('Magasins', self.stores) + \
+               "{:<30}: {}\n".format('Url', self.url) + \
+               "{:<30}: {}\n".format('Grade', self.nutrition_grade)
+
+    def list_item(self, print_header=False):
+        """ print product in list way
+         if print_header print header :-) """
+        if print_header:
+            print("{:<15}".format('Identifiant') +
+                  "{:<30}".format('Nom') +
+                  "{:<30}".format('Marque') +
+                  "{:<5}".format('Grade'))
+
+        print("{:<15}".format( str(self.ident)) +
+              "{:<30}".format(self.name or '-') +
+              "{:<30}".format(self.brands or '-') +
+              "{:<5}".format(self.nutrition_grade or '-'))
+
+    def print_json(self):
+        """ print json way """
+        return str(self._columns_values)
+
     # builder json
     @classmethod
     def buildfromjson(cls, **product):
@@ -50,9 +79,6 @@ class Product():
             for k, v in product.items()])
         return cls(**new_map)
 
-    def __str__(self):
-        return str(self._columns_values)
-
     @property
     def ident(self):
         """ returns id product """
@@ -66,7 +92,7 @@ class Product():
     @property
     def name(self):
         """ returns name """
-        return self._columns_values['name']
+        return self._columns_values['product_name']
 
     @property
     def generic_name(self):

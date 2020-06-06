@@ -57,18 +57,17 @@ TRANSITIONS_POSSIBLES = {
                   CURR_PYTHON, SERVICE_PB),
           'InputValues': {'key_words': 'les mot(s)'
                                        ' clé(s) wildcard "*" accepté'}},
-    'F': {'Label': 'Afficher une categorie',
+    'F': {'Label': 'Afficher le détail d\'une categorie',
           'Trigger': 'os.system("{} {} -gci _curr_category_")'.format(
               CURR_PYTHON, SERVICE_PB),
           'InputValues': {'curr_category': 'un identifiant categorie'}},
-    'G': {'Label': 'Afficher un produit',
+    'G': {'Label': 'Afficher le détail d\'un produit',
           'Trigger': 'os.system("{} {} -gpi _curr_product_")'.format(
               CURR_PYTHON, SERVICE_PB),
           'InputValues': {'curr_product': 'un identifiant produit'}},
-    'H': {'Label': 'Afficher un produit par ean',
+    'H': {'Label': 'Sélectionner un produit par son ean',
           'Trigger': ''},
     'I': {'Label': 'Enregistrer un produit de susbstitution',
-          # Pour enregistrer une liason entre curr_product et curr_subsitution
           'Trigger':
               'os.system("{} {} -ssp _curr_product_,_curr_subsitution_")'
               .format(CURR_PYTHON, SERVICE_PB),
@@ -91,7 +90,11 @@ TRANSITIONS_POSSIBLES = {
     'N': {'Label': 'Quitter',
           'Trigger': 'sys.exit()'},
     'O': {'Label': 'Revenir au menu principal',
-          'Trigger': ''}
+          'Trigger': ''},
+    'P': {'Label': 'Lister les produits de cette catégorie',
+          'Trigger': 'os.system("{} {} -gplc _curr_category_")'.format(
+              CURR_PYTHON, SERVICE_PB),
+          'LastValues': {'curr_category': 'Identifiant catégorie'}}
 }
 
 ETATS_POSSIBLES = {
@@ -107,7 +110,8 @@ ETATS_POSSIBLES = {
     10: 'Resultat subsitutions enregistrées',
     11: 'Resultat liste de subsitutions proposées',
     12: 'Resultat affichage de la base de subsitutions',
-    13: 'Bye'
+    13: 'Resultat liste de pdt de la categorie en cours',
+    14: 'Bye'
 }
 
 PATHS = {
@@ -116,58 +120,65 @@ PATHS = {
     (1, 3): 'C',  # Lister categories
     (1, 5): 'E',  # Lister produits par mots clés
     (1, 12): 'M',  # Lister la base des substitutions
-    (1, 13): 'N',  # Quitter
+    (1, 14): 'N',  # Quitter
     # Base chargee
     (2, 1): 'O',  # revenir au menu principal
-    (2, 13): 'N',  # Quitter
+    (2, 14): 'N',  # Quitter
     # Lister les categories
     (3, 4): 'D',  # Lister les produits d'une categorie
     (3, 6): 'F',  # Afficher une catégorie par id
     (3, 1): 'O',  # revenir au menu principal
-    (3, 13): 'N',  # Quitter
+    (3, 14): 'N',  # Quitter
     # Lister  les produits d'une categorie
     (4, 7): 'G',  # Afficher un produit
     (4, 1): 'O',  # revenir au menu principal
-    (4, 13): 'N',  # Quitter
+    (4, 14): 'N',  # Quitter
     # Lister les produits par mots clés
     (5, 7): 'G',  # Afficher un produit par id
     (5, 1): 'O',  # revenir au menu principal
-    (5, 13): 'N',  # Quitter
+    (5, 14): 'N',  # Quitter
     # Afficher  les catégories par id
+    (6, 13): 'P',  # Lister les produits de la categorie en cours
     (6, 4): 'D',  # Lister les produits d'une categorie
     (6, 1): 'O',  # revenir au menu principal
-    (6, 13): 'N',  # Quitter
+    (6, 14): 'N',  # Quitter
     # Afficher un produit
     (7, 9): 'L',  # Lister les substitutions du pdt en cours
     (7, 11): 'K',  # Lister les substitutions
     (7, 1): 'O',  # revenir au menu principal
-    (7, 13): 'N',  # Quitter
+    (7, 14): 'N',  # Quitter
     # Afficher un produit Par Ean
     (8, 9): 'L',  # Lister les substitutions du pdt en cours
     (8, 11): 'K',  # Lister les substitutions
     (8, 1): 'O',  # revenir au menu principal
-    (8, 13): 'N',  # Quitter
+    (8, 14): 'N',  # Quitter
     # choisir comme subsitituable
     (9, 10): 'I',  # Enregistrer subsitution
     (9, 1): 'O',  # revenir au menu principal
-    (9, 13): 'M',  # Quitter
+    (9, 14): 'M',  # Quitter
     # choisir comme subsititution
+    (10, 12): 'M',  # Lister la base des substitutions
     (10, 1): 'O',  # revenir au menu principal
-    (10, 13): 'N',  # Quitter
+    (10, 14): 'N',  # Quitter
     # Afficher une liste de subtitution
     (11, 7): 'G',  # Afficher le produit
     (11, 1): 'O',  # revenir au menu principal
-    (11, 13): 'N',  # Quitter
+    (11, 14): 'N',  # Quitter
     # Afficher la base de subtitution
     (12, 1): 'O',  # revenir au menu principal
-    (12, 13): 'N',  # Quitter
+    (12, 14): 'N',  # Quitter
+    # Afficher une liste de produit de la categorie en cours
+    (13, 7): 'G',  # Afficher un produit
+    (13, 1): 'O',  # revenir au menu principal
+    (13, 14): 'N',  # Quitter
+
 }
 
 
 class Menu(object):
     """ Menu process """
-    transitions = None
-    etats = None
+    transitions = {}
+    etats = {}
 
     @classmethod
     def load(cls):
