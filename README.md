@@ -23,7 +23,8 @@ Le programme **client_pur_beurre.py**  est une interface exploitant les fonction
 Cette interface présente une suite de menus en mode texte. En guise de "user stories", nous définirons les différentes navigation dans l'arborescence des choix.
 
 Sur la plan technique / architecture, ces deux programmes programmes doivent :
-- définir un modele clair (produits, catégorie ,substituts en many 2 many)  
+- définir un model clair (produit categorie substitut (jointure many 2 many)) 
+
 - respecter la PEP8 /257
 - avoir des packages définis (pas de classe "fourre tout")
 - découpler Presentation  / Model / View 
@@ -57,7 +58,7 @@ modifier la configuration :
 # cd ../resources
 # vim database.json.to_configure
 ````
-modifier les parametres de connexion et savegarder sous 'database.json'
+modifier les parametres de connexion et sauvegarder sous 'database.json'
 
 lancer/tester
 ````
@@ -138,14 +139,13 @@ Sélectionner l'option 1, puis l'identifiant correspondant à la catégorie dés
 
 ### Sélectioner un produit de la catégorie
 Sélectionner l'option 1, puis l'identifiant correspondant au produit désiré.
-![Menu principal](doc/US4.png)
 
 ### Afficher la liste des substitutions possibles pour le produit selectionné
 Sélectionner l'option 1 pour obtenir les produits substituables<br>
 Ces produits sont affichés par ordre de correspondance selon les critères suivants :<br>
 - Le nombre de catégories en commun
 - le nutriscore le moins élevé
-- le score de la fonction "match" mysql sur les chammps name et marque.
+- le score de la fonction "match" mysql sur les champs product_name et name.
 ![Menu principal](doc/US5.png)
 
 ### Enregistrer un produit comme substituable
