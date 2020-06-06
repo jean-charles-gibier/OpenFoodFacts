@@ -71,7 +71,7 @@ def main():
         print("******************************************************")
         print(search_product)
         print("******************************************************")
-        print("Pur Beurre vous propose le substitut suivant :")
+        print("Pur Beurre vous propose le(s) substitut(s) suivant(s) :")
         print("******************************************************")
         for product in products:
             product.list_item()

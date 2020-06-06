@@ -39,21 +39,62 @@ TRANSITIONS_POSSIBLES = {
     'A': {'Label': 'Acceder au menu principal',
           'TriggerAfter': ''},
 
-    'B': {'Label': 'Quel élément souhaitez vous remplacer ?',
+    'B': {'Label': 'Quel aliment souhaitez vous remplacer ?',
           'TriggerBefore': r'os.system("{} {} -gcl")'.format(
               CURR_PYTHON, SERVICE_PB),
-          'InputValues': {'curr_category': 'un identifiant categorie'}
+          'InputValues': {'curr_category': 'un identifiant categorie'},
+          'TriggerAfter': 'os.system("{} {} -gci _curr_category_")'.format(
+              CURR_PYTHON, SERVICE_PB),
           },
 
-    'C': {'Label': 'Retrouver mes aliments substitues',
+    'C': {'Label': 'Retrouver mes aliments substitués',
           'TriggerAfter': r'os.system("{} {} -gsp")'.format(
               CURR_PYTHON, SERVICE_PB)},
 
     'D': {'Label': 'Sélectionner un produit dans cette catégorie',
           'TriggerBefore': r'os.system("{} {} -gplc _curr_category_")'.format(
               CURR_PYTHON, SERVICE_PB),
-          'LastValues': {'curr_category': 'Identifiant catégorie'}
+          'PreviousValues': {'curr_category': 'Identifiant catégorie'}
           },
+
+    'E': {'Label': 'Sélectionner une autre catégorie',
+          'TriggerAfter': 'os.system("{} {} -gci _curr_category_")'.format(
+              CURR_PYTHON, SERVICE_PB),
+          'InputValues': {'curr_category': 'un autre identifiant categorie'},
+          },
+
+    'F': {'Label': 'Sélectionner un produit à substituer',
+          'TriggerAfter': 'os.system("{} {} -gpi _curr_product_")'.format(
+              CURR_PYTHON, SERVICE_PB),
+          'InputValues': {'curr_product': 'un identifiant produit'},
+          },
+
+    'G': {'Label': 'Sélectionner un autre produit à substituer',
+          'TriggerAfter': 'os.system("{} {} -gpi _curr_product_")'.format(
+              CURR_PYTHON, SERVICE_PB),
+          'InputValues': {'curr_product': 'un identifiant produit'},
+          },
+
+    'H': {'Label': 'Lister les produits de substitution',
+          'TriggerBefore': 'os.system("{} {} -gpsl _curr_product_")'.format(
+              CURR_PYTHON, SERVICE_PB),
+          'PreviousValues': {'curr_product': 'Identifiant produit'}
+          },
+
+    'I': {'Label': 'Enregistrer le produit de substitution',
+          'TriggerAfter':
+              'os.system("{} {} -ssp _curr_product_,_curr_subsitution_")'
+                  .format(CURR_PYTHON, SERVICE_PB),
+          'InputValues': {'curr_subsitution': 'un identifiant subtitution'},
+          'PreviousValues': {'curr_product': 'Identifiant produit'}
+          },
+
+    'J': {'Label': 'Lister les produits par mots clés',
+          'TriggerAfter':
+              'os.system("{} {} -gplm _key_words_")'.format(
+                  CURR_PYTHON, SERVICE_PB),
+          'InputValues': {'key_words': 'les mot(s)'
+                                       ' clé(s) wildcard "*" accepté'}},
 
     'Z': {'Label': 'Quitter',
           'TriggerAfter': 'sys.exit()'}
@@ -64,24 +105,42 @@ ETATS_POSSIBLES = {
     2: 'Reponse à Quel élément souhaitez vous remplacer ?',
     3: 'Reponse à Retrouver mes aliments substitués',
     4: 'Reponse à Selectionner categorie, produit demandé',
+    5: 'Reponse à Selectionner une autre catégorie',
+    6: 'Reponse à rechercher /lister les produits de substitution',
+    7: 'Reponse à Selectionner le produit de substitution',
+    8: 'Reponse à lister les aliments par mots clés',
     14: 'Bye'
 }
 
 PATHS = {
     # menu principal
-    (1, 2): 'B',  # Quel élément souhaitez vous remplacer ?
-    (1, 3): 'C',  # Retrouver mes aliments substitués
+    (1, 2): 'B',  # Quel aliment souhaitez vous remplacer ?
+    (1, 1): 'C',  # Retrouver mes aliments substitués
+    (1, 4): 'J',  # Retrouver un aliment par des mots clés
     (1, 14): 'Z',  # Quitter
     # "Quel élément souhaitez vous remplacer" demandé
-    (2, 4): 'D',  # Produit demandé
+    (2, 4): 'D',  # Produit demandé dans la categorie courante
+    (2, 2): 'E',  # Produit demandé dans une autre catégorie
     (2, 1): 'A',  # revenir au menu principal
     (2, 14): 'Z',  # Quitter
-    # Retrouver mes aliments substitués demandé
-    (3, 1): 'A',  # revenir au menu principal
-    (3, 14): 'Z',  # Quitter
     # Lister  les produits d'une categorie
+    (4, 5): 'F',  # Selectionner un produit à subsituer
     (4, 1): 'A',  # revenir au menu principal
     (4, 14): 'Z',  # Quitter
+    # selectionner un produit à subsituer
+    (5, 6): 'H',  # Rechercher la substitution pour ce produit
+    (5, 5): 'G',  # choisir un autre produit a substituer
+    (5, 1): 'A',  # revenir au menu principal
+    (5, 14): 'Z',  # Quitter
+    # Rechercher la substitution pour ce produit
+    (6, 7): 'I',  # Enregistrer le produit de substitution
+    (6, 1): 'A',  # revenir au menu principal
+    (6, 14): 'Z',  # Quitter
+    # menu principal (copie) pb de conception du menu :-(
+    (7, 2): 'B',  # Quel élément souhaitez vous remplacer ?
+    (7, 1): 'C',  # Retrouver mes aliments substitués
+    (7, 14): 'Z',  # Quitter
+
 }
 
 
@@ -140,7 +199,7 @@ class Menu(object):
                         ipv = next_trans.params['PreviousValues'].items()
                         for val, label in ipv:
                             cmd_b = cmd_b.replace('_' + val + '_',
-                                                registered_values[val])
+                                                  registered_values[val])
                     # execute TriggerBefore
                     eval(cmd_b)
 
@@ -163,7 +222,7 @@ class Menu(object):
                         ipv = next_trans.params['PreviousValues'].items()
                         for val, label in ipv:
                             cmd_a = cmd_a.replace('_' + val + '_',
-                                                registered_values[val])
+                                                  registered_values[val])
                     # execute TriggerAfter
                     eval(cmd_a)
             else:
