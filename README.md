@@ -89,8 +89,8 @@ Le logiciel client se lance sans argument.
 ````
 
 ###note:
-Le logiciel client interroge le logiciel de requetage **pur_beurre.py**.
-Il peut être lancé indépendament avec les paramètres suivants :
+Le logiciel client interroge le logiciel de requetage **pur_beurre.py**.<br>
+Celui-ci peut être lancé indépendament avec les paramètres suivants :
 ````
 usage: pur_beurre.py [-h] [-d NBCATEGORY] [-c COUNTRY] [-n NBPRODUCTS]
                      [-gpi GET_PRODUCT_BY_ID] [-gci GET_CATEGORY_BY_ID] [-gcl]
