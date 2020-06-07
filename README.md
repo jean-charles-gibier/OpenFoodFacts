@@ -119,17 +119,27 @@ optional arguments:
 # description des fonctionalités
 
 ## chargement de la base 
+
+Le chargement de la base se lance par l'execution de la ligne de commande suivante :
+````
+# python  pur_beurre.py -r
+````
+ou
+````
+# python  pur_beurre.py --reload
+````
+Le programme charge tout les produits de la base OFF à partir des critères suivants :<br>
+Tous les produits appartenant aux categories <françaises> contenant de plus de 10.000 produits <br>
+[cf constantes associées au chargement pour toute modification.](https://github.com/jean-charles-gibier/OpenFoodFacts/blob/develop/core/constant.py)
+
+### Affichager les categories
 ![Menu principal](doc/US1.png)
 
 Choisir l'option 1 du menu principal
 
 ![Menu principal](doc/US2.png)
 
-Le programme charge tout les produits de la base OFF à partir des critères suivants :<br>
-Tous les produits appartenant aux categories <françaises> contenant de plus de 10.000 produits <br>
-[cf constantes associées au chargement pour toute modification.](https://github.com/jean-charles-gibier/OpenFoodFacts/blob/develop/core/constant.py)
 
-### Affichager les categories
 Choisir la catégorie à afficher en selectionnant son identifiant. 
 ![Menu principal](doc/US3.png)
 
