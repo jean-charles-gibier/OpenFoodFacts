@@ -63,11 +63,23 @@ modifier les parametres de connexion et sauvegarder sous 'database.json'
 lancer/tester
 ````
 # pip install -r requirements.txt
-# python3 pur_beurre.py -h
-# python3 client_pur_beurre.py 
+# python pur_beurre.py -h
+# python client_pur_beurre.py 
 ````
 
+## chargement de la base 
 
+Le chargement de la base se lance par l'execution de la ligne de commande suivante :
+````
+# python  pur_beurre.py -r
+````
+ou
+````
+# python  pur_beurre.py --reload
+````
+Le programme charge tout les produits de la base OFF à partir des critères suivants :<br>
+Tous les produits appartenant aux categories <françaises> contenant de plus de 10.000 produits <br>
+[cf constantes associées au chargement pour toute modification.](https://github.com/jean-charles-gibier/OpenFoodFacts/blob/develop/core/constant.py)
 
 ## usage
 
@@ -117,20 +129,6 @@ optional arguments:
 
 
 # description des fonctionalités
-
-## chargement de la base 
-
-Le chargement de la base se lance par l'execution de la ligne de commande suivante :
-````
-# python  pur_beurre.py -r
-````
-ou
-````
-# python  pur_beurre.py --reload
-````
-Le programme charge tout les produits de la base OFF à partir des critères suivants :<br>
-Tous les produits appartenant aux categories <françaises> contenant de plus de 10.000 produits <br>
-[cf constantes associées au chargement pour toute modification.](https://github.com/jean-charles-gibier/OpenFoodFacts/blob/develop/core/constant.py)
 
 ### Affichager les categories
 ![Menu principal](doc/US1.png)
