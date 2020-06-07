@@ -88,7 +88,7 @@ Le logiciel client se lance sans argument.
 # python ./client_pur_beurre.py
 ````
 
-/note/:<br>
+*Note*:<br>
 Le logiciel client interroge le logiciel de requetage **pur_beurre.py**.<br>
 Celui-ci peut être lancé indépendament avec les paramètres suivants :
 ````
